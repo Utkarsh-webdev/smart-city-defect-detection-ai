@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block title %}Municipal Administration Center - SmartDefect AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <!-- Header Controls -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="fas fa-shield-alt text-warning me-2"></i>Municipal Command Center</h2>
+            <p class="text-muted mb-0">Live AI-assisted infrastructure defect monitoring and maintenance triage.</p>
+        </div>
+        <div class="d-flex gap-2 mt-3 mt-md-0">
+            <a href="{{ url_for('admin.manage_complaints') }}" class="btn btn-primary fw-bold">
+                <i class="fas fa-tasks me-1"></i> Full Triage Queue
+            </a>
+            <a href="{{ url_for('admin.export_csv') }}" class="btn btn-outline-success">
+                <i class="fas fa-file-excel me-1"></i> Export CSV
+            </a>
+        </div>
+    </div>
+
+    <!-- 5 KPI Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4 col-xl">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">TOTAL DEFECTS</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <h3 class="fw-bold mb-0 text-primary">{{ total_complaints }}</h3>
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary"><i class="fas fa-layer-group"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">PENDING REVIEW</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <h3 class="fw-bold mb-0 text-warning">{{ pending_review }}</h3>
+                    <div class="stat-icon bg-warning bg-opacity-10 text-warning"><i class="fas fa-clock"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">DISPATCHED / CREW</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <h3 class="fw-bold mb-0 text-info">{{ in_progress }}</h3>
+                    <div class="stat-icon bg-info bg-opacity-10 text-info"><i class="fas fa-hard-hat"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">RESOLVED</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <h3 class="fw-bold mb-0 text-success">{{ resolved_count }}</h3>
+                    <div class="stat-icon bg-success bg-opacity-10 text-success"><i class="fas fa-check-double"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">CRITICAL HAZARDS</div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <h3 class="fw-bold mb-0 text-danger">{{ critical_count }}</h3>
+                    <div class="stat-icon bg-danger bg-opacity-10 text-danger"><i class="fas fa-exclamation-triangle"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-4 mb-4">
+        <!-- 7-Day Intake Trend Line Chart -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-chart-line text-primary me-2"></i>7-Day Defect Intake vs. Resolution Rate</h6>
+                    <span class="badge bg-light text-muted border">Daily Trend</span>
+                </div>
+                <div class="card-body">
+                    <div style="height: 280px;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Defect Categories Doughnut Chart -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-chart-pie text-info me-2"></i>Defect Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <div style="height: 280px;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Defect Map Row -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center">
+            <h6 class="fw-bold mb-0"><i class="fas fa-map-marked-alt text-danger me-2"></i>City GIS Incident Heatmap</h6>
+            <div class="d-flex gap-2 mt-2 mt-md-0">
+                <select id="mapDefectFilter" class="form-select form-select-sm" style="width: auto;">
+                    <option value="all">All Defect Classes</option>
+                    <option value="Pothole">Potholes</option>
+                    <option value="Broken Traffic Sign">Broken Signs</option>
+                    <option value="Garbage Dump">Garbage Dumps</option>
+                    <option value="Cracked Road">Cracked Roads</option>
+                </select>
+                <select id="mapStatusFilter" class="form-select form-select-sm" style="width: auto;">
+                    <option value="all">All Statuses</option>
+                    <option value="Admin Review">Admin Review</option>
+                    <option value="Worker Assigned">Worker Assigned</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div id="defectMap" style="height: 400px; border-radius: 0 0 16px 16px;"></div>
+        </div>
+    </div>
+
+    <!-- Rapid Triage Table & Field Crew Status -->
+    <div class="row g-4">
+        <!-- Rapid Triage Queue -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-inbox text-warning me-2"></i>Recent Defect Triage Queue</h6>
+                    <a href="{{ url_for('admin.manage_complaints') }}" class="btn btn-sm btn-outline-primary">View Full Queue</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Ticket</th>
+                                    <th>Defect Type</th>
+                                    <th>AI Conf.</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in recent_complaints %}
+                                    <tr class="docket-row">
+                                        <td>
+                                            <a href="{{ url_for('admin.manage_complaints', q=c.ticket_number) }}" class="ticket-stub font-monospace text-decoration-none">
+                                                {{ c.ticket_number }}
+                                            </a>
+                                            <div class="small text-muted">{{ c.zone }}</div>
+                                        </td>
+                                        <td>
+                                            <span class="badge {% if c.final_defect_type == 'Pothole' %}badge-pothole{% elif c.final_defect_type == 'Broken Traffic Sign' %}badge-traffic-sign{% elif c.final_defect_type == 'Garbage Dump' %}badge-garbage{% else %}badge-cracked-road{% endif %}">
+                                                {{ c.final_defect_type }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="font-monospace fw-bold text-success">
+                                                {{ (c.ai_confidence * 100)|int if c.ai_confidence else 0 }}%
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-{{ 'danger' if c.severity == 'Critical' else 'warning' if c.severity == 'High' else 'info' }}">
+                                                {{ c.severity }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge rounded-pill status-stamp bg-{{ 'success' if c.status == 'Resolved' else 'primary' if c.status == 'Worker Assigned' or c.status == 'In Progress' else 'warning text-dark' }}">
+                                                {{ c.status }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#assignWorkerModal"
+                                                        data-complaint-id="{{ c.id }}" data-ticket="{{ c.ticket_number }}" title="Assign Worker">
+                                                    <i class="fas fa-hard-hat"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reclassifyModal"
+                                                        data-complaint-id="{{ c.id }}" data-ticket="{{ c.ticket_number }}" 
+                                                        data-defect="{{ c.final_defect_type }}" data-severity="{{ c.severity }}" title="Reclassify">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Field Workers Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-users-cog text-success me-2"></i>Field Crew Workload</h6>
+                    <a href="{{ url_for('admin.workers') }}" class="btn btn-sm btn-outline-success">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% for w in available_workers %}
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                            <div>
+                                <h6 class="fw-bold mb-0">{{ w.name }}</h6>
+                                <small class="text-muted">{{ w.department }} &bull; {{ w.zone }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-{{ 'success' if w.status == 'Available' else 'warning text-dark' }} mb-1">{{ w.status }}</span>
+                                <div class="small text-muted">{{ w.active_tasks_count }} active tasks</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- 1. Assign Worker Modal -->
+<div class="modal fade" id="assignWorkerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" id="assignWorkerForm">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-hard-hat me-2"></i>Dispatch Field Worker</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted small mb-3">Assigning maintenance crew to ticket: <strong id="assignModalTicket" class="font-monospace text-primary"></strong></p>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Available Worker <span class="text-danger">*</span></label>
+                        <select name="worker_id" class="form-select" required>
+                            {% for w in available_workers %}
+                                <option value="{{ w.id }}">{{ w.name }} &mdash; {{ w.department }} ({{ w.zone }}) [{{ w.active_tasks_count }} Active Tasks]</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Dispatch Instructions / Notes</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Provide priority level, required repair materials, or landmark details..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Confirm Dispatch</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 2. Reclassify Defect Modal -->
+<div class="modal fade" id="reclassifyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" id="reclassifyForm">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Reclassify Defect / Severity</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted small mb-3">Updating classification for ticket: <strong id="reclassifyModalTicket" class="font-monospace text-primary"></strong></p>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Defect Category</label>
+                        <select name="final_defect_type" id="modalDefectSelect" class="form-select">
+                            <option value="Pothole">Pothole</option>
+                            <option value="Broken Traffic Sign">Broken Traffic Sign</option>
+                            <option value="Garbage Dump">Garbage Dump</option>
+                            <option value="Cracked Road">Cracked Road</option>
+                            <option value="Other">Other Civic Defect</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Severity Level</label>
+                        <select name="severity" id="modalSeveritySelect" class="form-select">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical Hazard</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Officer Review Remarks</label>
+                        <textarea name="admin_notes" class="form-control" rows="2" placeholder="Reason for classification change..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-dark fw-bold">Save Changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initDefectMap('defectMap', 28.6139, 77.2090, 12);
+    });
+</script>
+{% endblock %}

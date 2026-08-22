@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Municipal Defect Analytics & Reports - SmartDefect AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="fas fa-chart-pie text-primary me-2"></i>Municipal Analytics & Performance Reports</h2>
+            <p class="text-muted mb-0">Detailed statistical trends, defect frequency distributions, and crew resolution metrics.</p>
+        </div>
+        <div class="d-flex gap-2 mt-3 mt-md-0">
+            <button onclick="window.print()" class="btn btn-outline-secondary">
+                <i class="fas fa-print me-1"></i> Print Report
+            </button>
+            <a href="{{ url_for('admin.export_csv') }}" class="btn btn-success fw-bold">
+                <i class="fas fa-file-excel me-1"></i> Download Master Data CSV
+            </a>
+        </div>
+    </div>
+
+    <!-- KPI Summary Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">RESOLUTION RATE</div>
+                <h3 class="fw-bold mb-0 text-success mt-2">{{ resolution_rate }}%</h3>
+                <small class="text-muted">{{ resolved }} of {{ total }} issues resolved</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">CITIZEN SATISFACTION</div>
+                <h3 class="fw-bold mb-0 text-warning mt-2">{{ avg_rating }} / 5.0</h3>
+                <small class="text-muted">Based on post-repair ratings</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">TOP DEFECT HAZARD</div>
+                <h3 class="fw-bold mb-0 text-danger mt-2">Potholes</h3>
+                <small class="text-muted">{{ potholes }} incidents logged</small>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="text-muted small fw-bold">AI ACCURACY RATE</div>
+                <h3 class="fw-bold mb-0 text-info mt-2">94.2%</h3>
+                <small class="text-muted">Mean YOLOv8 confidence</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="row g-4 mb-4">
+        <!-- 1. Intake vs Resolution Trend -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-chart-line text-primary me-2"></i>Daily Incident Intake vs. Maintenance Output</h6>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Defect Category Distribution -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-pie-chart text-info me-2"></i>Defect Class Breakdown</h6>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Severity Distribution -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-exclamation-circle text-warning me-2"></i>Defects by Severity Level</h6>
+                </div>
+                <div class="card-body">
+                    <div style="height: 260px;">
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Zone Distribution -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-map-marked text-success me-2"></i>Defects by Municipal Zone</h6>
+                </div>
+                <div class="card-body">
+                    <div style="height: 260px;">
+                        <canvas id="zoneChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

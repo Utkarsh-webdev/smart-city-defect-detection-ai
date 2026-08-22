@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}User Profile - SmartDefect AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="bg-primary text-white p-4 text-center">
+                    <div class="stat-icon bg-white text-primary mx-auto mb-2">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1">{{ user.full_name }}</h4>
+                    <p class="mb-0 small text-light opacity-75">Registered Citizen Account</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('auth.profile') }}">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Full Name</label>
+                            <input type="text" name="full_name" class="form-control" value="{{ user.full_name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email Address</label>
+                            <input type="email" class="form-control" value="{{ user.email }}" readonly disabled>
+                            <small class="text-muted">Email address cannot be changed.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Phone Number</label>
+                            <input type="tel" name="phone" class="form-control" value="{{ user.phone }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Residential Address</label>
+                            <textarea name="address" class="form-control" rows="2">{{ user.address or '' }}</textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Update Password</label>
+                            <input type="password" name="new_password" class="form-control" placeholder="Leave blank to keep current password">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

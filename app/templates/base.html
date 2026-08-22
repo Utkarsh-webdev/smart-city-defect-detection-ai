@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1B1B18">
+    <title>{% block title %}SmartDefect AI — Civic Infrastructure Defect Detection{% endblock %}</title>
+
+    <!-- Framework + civic visual system -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <!-- Big Shoulders Display / Public Sans / JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid civic-shell">
+            <a class="navbar-brand civic-brand" href="{{ url_for('index') }}">
+                <span class="brand-mark">SD</span>
+                <span>
+                    <strong>SMARTDEFECT</strong>
+                    <small>CIVIC INFRASTRUCTURE / AI TRIAGE</small>
+                </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 civic-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}"><span class="nav-code">00</span> HOME</a>
+                    </li>
+
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.__class__.__name__ == 'Citizen' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('citizen.dashboard') }}"><span class="nav-code">01</span> DASHBOARD</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('citizen.upload_complaint') }}"><span class="nav-code">02</span> REPORT DEFECT</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('citizen.complaint_history') }}"><span class="nav-code">03</span> HISTORY</a>
+                            </li>
+                        {% elif current_user.__class__.__name__ == 'Admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin.dashboard') }}"><span class="nav-code">01</span> CONTROL</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin.manage_complaints') }}"><span class="nav-code">02</span> QUEUE</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin.workers') }}"><span class="nav-code">03</span> CREW</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin.analytics') }}"><span class="nav-code">04</span> ANALYTICS</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+
+                <ul class="navbar-nav ms-auto align-items-lg-center civic-actions">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle user-chip" href="#" role="button" data-bs-toggle="dropdown">
+                                <span class="role-label">{{ 'ADMIN' if current_user.__class__.__name__ == 'Admin' else 'CITIZEN' }}</span>
+                                <strong>{{ current_user.username if current_user.__class__.__name__ == 'Admin' else current_user.full_name }}</strong>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end civic-menu">
+                                {% if current_user.__class__.__name__ == 'Citizen' %}
+                                    <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}"><i class="fas fa-user-circle me-2"></i> Profile</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item danger-link" href="{{ url_for('auth.logout') }}"><i class="fas fa-arrow-right-from-bracket me-2"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item"><a class="btn btn-sm btn-outline-light civic-nav-btn" href="{{ url_for('auth.citizen_login') }}">CITIZEN LOGIN</a></li>
+                        <li class="nav-item"><a class="btn btn-sm btn-docket civic-nav-btn" href="{{ url_for('auth.citizen_register') }}">REGISTER</a></li>
+                        <li class="nav-item"><a class="btn btn-sm btn-outline-light civic-nav-btn" href="{{ url_for('auth.admin_login') }}">ADMIN PORTAL</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="civic-rule"></div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="container-fluid civic-shell flash-stack">
+            {% for category, message in messages %}
+                <div class="alert civic-alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    <strong class="mono-label">{{ category|upper }}</strong>
+                    <span>{{ message }}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1100;"></div>
+
+<footer class="site-footer">
+    <div class="container-fluid civic-shell">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-title">SMARTDEFECT AI</div>
+                <div class="footer-sub">{{ app_subtitle }}</div>
+            </div>
+            <div class="footer-meta">
+                <span>PUBLIC WORKS / DIGITAL SERVICE</span>
+                <span class="mono-label">{{ current_year }} / MCA MAJOR PROJECT</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

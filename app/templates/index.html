@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}SmartDefect AI — Municipal Field Office{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+  <div class="container civic-shell">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-7">
+        <div class="hero-index"><span>SD / 01</span> &nbsp; MUNICIPAL DIGITAL SERVICE &nbsp; / &nbsp; FIELD OFFICE</div>
+        <div class="hero-kicker">AI INFRASTRUCTURE TRIAGE / CIVIC WORK ORDER SYSTEM</div>
+        <h1 class="hero-title">Report what is broken. Route what matters.</h1>
+        <p class="hero-copy">SmartDefect turns citizen photographs into geo-tagged municipal service dockets. Computer vision classifies the defect, severity is calculated, and the repair queue moves from report to field verification.</p>
+        <div class="d-flex flex-wrap gap-2 hero-actions">
+          <a href="{{ url_for('citizen.upload_complaint') if current_user.is_authenticated else url_for('auth.citizen_login') }}" class="btn btn-warning px-4 py-3"><i class="fas fa-camera me-2"></i>FILE A DEFECT</a>
+          <a href="{{ url_for('admin.dashboard') if current_user.is_authenticated and current_user.__class__.__name__ == 'Admin' else url_for('auth.admin_login') }}" class="btn btn-outline-light px-4 py-3"><i class="fas fa-shield-alt me-2"></i>OFFICER DESK</a>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="hero-ledger">
+          <div class="hero-ledger-head"><span>LIVE INFERENCE LOG</span><span>STATUS: <b class="ok">ONLINE</b></span></div>
+          <div class="hero-ledger-body">
+            <div>&gt; MODEL&nbsp;&nbsp;&nbsp;&nbsp;YOLOV8 / DEFECT-4</div>
+            <div>&gt; INPUT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CITIZEN IMAGE</div>
+            <div class="hot">&gt; CLASS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POTHOLE / 94.2%</div>
+            <div class="warn">&gt; SEVERITY&nbsp;&nbsp;HIGH / ROUTE PRIORITY 01</div>
+            <div>&gt; GPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;28.6139 N / 77.2090 E</div>
+            <div class="ok">&gt; TICKET&nbsp;&nbsp;&nbsp;&nbsp;SCD-2026-8421 / QUEUED</div>
+            <div>&gt; DISPATCH&nbsp;&nbsp;MUNICIPAL FIELD CREW</div>
+          </div>
+          <div class="hero-ledger-stub">VERIFIED PIPELINE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-frame">
+  <div class="container civic-shell">
+    <div class="row align-items-end mb-4">
+      <div class="col-lg-7"><div class="section-kicker">02 / DETECTION REGISTER</div><h2 class="section-title">Four defects. One civic queue.</h2></div>
+      <div class="col-lg-5"><p class="text-muted mb-0">The vision layer identifies common public-infrastructure failures and hands structured evidence to municipal operations.</p></div>
+    </div>
+    <div class="registry-list">
+      <div class="registry-row"><div class="registry-no">01</div><div><div class="registry-name">Road Pothole</div><div class="registry-desc">Asphalt depressions and surface failures. Severity score drives route priority.</div></div><div class="registry-mark text-danger"><i class="fas fa-road"></i></div></div>
+      <div class="registry-row"><div class="registry-no">02</div><div><div class="registry-name">Broken Traffic Sign</div><div class="registry-desc">Bent, damaged, or missing regulatory signs that require field inspection.</div></div><div class="registry-mark text-warning"><i class="fas fa-traffic-light"></i></div></div>
+      <div class="registry-row"><div class="registry-no">03</div><div><div class="registry-name">Garbage Dump</div><div class="registry-desc">Unauthorized waste accumulation and overflowing disposal points.</div></div><div class="registry-mark text-success"><i class="fas fa-trash-alt"></i></div></div>
+      <div class="registry-row"><div class="registry-no">04</div><div><div class="registry-name">Cracked Road</div><div class="registry-desc">Longitudinal, transverse, and alligator cracking before failures become larger.</div></div><div class="registry-mark"><i class="fas fa-crutch"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-frame">
+  <div class="container civic-shell">
+    <div class="row align-items-end mb-4"><div class="col-lg-7"><div class="section-kicker">03 / SERVICE ROUTE</div><h2 class="section-title">From photograph to verified repair.</h2></div><div class="col-lg-5"><p class="text-muted mb-0">Every report becomes a traceable service record with location, evidence, AI result, assignment, and resolution history.</p></div></div>
+    <div class="workflow">
+      <div class="workflow-step"><div class="workflow-no">01 / CAPTURE</div><h4>File</h4><p>Citizen uploads evidence and locks the location with GPS coordinates.</p></div>
+      <div class="workflow-step"><div class="workflow-no">02 / TRIAGE</div><h4>Classify</h4><p>YOLOv8 detects defect class and calculates confidence and severity.</p></div>
+      <div class="workflow-step"><div class="workflow-no">03 / DISPATCH</div><h4>Route</h4><p>Officer reviews the queue, assigns a field worker, and tracks progress.</p></div>
+      <div class="workflow-step"><div class="workflow-no">04 / VERIFY</div><h4>Close</h4><p>Repair evidence is recorded and the citizen receives the final status.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-frame">
+  <div class="container civic-shell">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+      <div><div class="section-kicker">04 / GIS REGISTER</div><h2 class="section-title mb-0">City defect map.</h2></div>
+      <div class="d-flex gap-2">
+        <select id="mapDefectFilter" class="form-select form-select-sm"><option value="all">ALL DEFECTS</option><option value="Pothole">POTHOLES</option><option value="Broken Traffic Sign">BROKEN SIGNS</option><option value="Garbage Dump">GARBAGE</option><option value="Cracked Road">CRACKS</option></select>
+        <select id="mapStatusFilter" class="form-select form-select-sm"><option value="all">ALL STATUS</option><option value="Pending">PENDING</option><option value="Worker Assigned">ASSIGNED</option><option value="Resolved">RESOLVED</option></select>
+      </div>
+    </div>
+    <div class="map-frame"><div class="map-toolbar"><span><i class="fas fa-location-dot me-2"></i>PUBLIC WORKS / LIVE INCIDENT REGISTER</span><span class="text-success">● DATA LINK ACTIVE</span></div><div id="defectMap"></div></div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script>document.addEventListener('DOMContentLoaded',()=>{initDefectMap('defectMap',28.6139,77.2090,12);});</script>
+{% endblock %}

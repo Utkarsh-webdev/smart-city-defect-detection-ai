@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Report Municipal Defect - SmartDefect AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="bg-primary text-white p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-white text-primary me-3">
+                            <i class="fas fa-camera-retro"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-1">Report Infrastructure Defect</h3>
+                            <p class="mb-0 small text-light opacity-90">Upload defect photo; our YOLOv8 AI will classify severity & notify field crews.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <form method="POST" action="{{ url_for('citizen.upload_complaint') }}" enctype="multipart/form-data" id="uploadComplaintForm">
+                        
+                        <!-- 1. Image Upload Dropzone -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Defect Photograph <span class="text-danger">*</span></label>
+                            
+                            <div class="upload-dropzone" id="uploadDropzone">
+                                <i class="fas fa-cloud-upload-alt text-primary fs-1 mb-2"></i>
+                                <h5 class="fw-bold mb-1">Drag and drop defect photo here</h5>
+                                <p class="text-muted small mb-2">or click to browse files from your device</p>
+                                <span class="badge bg-light text-dark border">Supports JPG, PNG, WEBP (Max 16MB)</span>
+                            </div>
+                            
+                            <input type="file" name="defect_image" id="defect_image" class="d-none" accept="image/*" required>
+
+                            <!-- Live Image Preview Container -->
+                            <div id="imagePreviewContainer" class="preview-container text-center mt-3 d-none">
+                                <img id="previewImage" src="" class="img-fluid border" alt="Defect Preview">
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-sm btn-outline-danger" id="removeImageBtn">
+                                        <i class="fas fa-trash me-1"></i> Remove Photo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Complaint Title & Defect Type -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Complaint Title <span class="text-danger">*</span></label>
+                                <input type="text" name="title" class="form-control" placeholder="e.g. Deep pothole near City Center" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Estimated Defect Type <span class="text-danger">*</span></label>
+                                <select name="defect_type" class="form-select" required>
+                                    <option value="Pothole" selected>Road Pothole</option>
+                                    <option value="Broken Traffic Sign">Broken / Bent Traffic Sign</option>
+                                    <option value="Garbage Dump">Illegal Garbage Dump</option>
+                                    <option value="Cracked Road">Cracked Road Surface</option>
+                                    <option value="Other">Other Civic Hazard</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 3. GPS Geolocation Auto-Capture -->
+                        <div class="card bg-light border-0 rounded-3 p-3 mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold text-dark"><i class="fas fa-crosshairs text-danger me-1"></i> Geolocation Coordinates</span>
+                                <button class="btn btn-sm btn-outline-primary" id="fetchGpsBtn">
+                                    <i class="fas fa-sync-alt me-1"></i> Re-Fetch GPS
+                                </button>
+                            </div>
+                            
+                            <div id="geoStatus" class="small mb-2 text-muted">
+                                <i class="fas fa-spinner fa-spin me-1"></i> Requesting GPS lock from browser...
+                            </div>
+
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <input type="text" name="latitude" id="latitude" class="form-control form-control-sm font-monospace" placeholder="Latitude (e.g. 28.6139)" readonly>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" name="longitude" id="longitude" class="form-control form-control-sm font-monospace" placeholder="Longitude (e.g. 77.2090)" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Address & Zone -->
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold">Street Address / Landmark</label>
+                                <input type="text" name="address" id="address" class="form-control" placeholder="e.g. Ring Road Junction, near Pillar 45">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Municipal Zone</label>
+                                <select name="zone" class="form-select">
+                                    <option value="Central Zone" selected>Central Zone</option>
+                                    <option value="North Zone">North Zone</option>
+                                    <option value="South Zone">South Zone</option>
+                                    <option value="East Zone">East Zone</option>
+                                    <option value="West Zone">West Zone</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 5. Description -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Additional Notes / Description</label>
+                            <textarea name="description" class="form-control" rows="3" placeholder="Provide any extra details regarding hazard severity, traffic impact, or exact landmark..."></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow" id="submitBtn">
+                            <i class="fas fa-brain me-2"></i> Submit & Run AI Defect Analysis
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+<script>
+    document.getElementById('uploadComplaintForm').addEventListener('submit', function() {
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Running YOLOv8 Computer Vision Pipeline...';
+    });
+</script>
+{% endblock %}

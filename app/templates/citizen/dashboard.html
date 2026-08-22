@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Citizen Dashboard - SmartDefect AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Banner -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Citizen Portal</h2>
+            <p class="text-muted mb-0">Welcome back, <strong>{{ current_user.full_name }}</strong>! Manage and track your municipal reports.</p>
+        </div>
+        <a href="{{ url_for('citizen.upload_complaint') }}" class="btn btn-warning fw-bold text-dark shadow-sm px-4 py-2 mt-3 mt-md-0">
+            <i class="fas fa-camera me-1"></i> Report New Defect
+        </a>
+    </div>
+
+    <!-- Overview Stat Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-bold">TOTAL FILED</div>
+                        <h3 class="fw-bold mb-0 text-primary">{{ total_count }}</h3>
+                    </div>
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-bold">PENDING TRIAGE</div>
+                        <h3 class="fw-bold mb-0 text-warning">{{ pending_count }}</h3>
+                    </div>
+                    <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-bold">IN PROGRESS</div>
+                        <h3 class="fw-bold mb-0 text-info">{{ in_progress_count }}</h3>
+                    </div>
+                    <div class="stat-icon bg-info bg-opacity-10 text-info">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-bold">RESOLVED</div>
+                        <h3 class="fw-bold mb-0 text-success">{{ resolved_count }}</h3>
+                    </div>
+                    <div class="stat-icon bg-success bg-opacity-10 text-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Complaints Section -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0"><i class="fas fa-list text-primary me-2"></i>Recent Infrastructure Reports</h5>
+            <a href="{{ url_for('citizen.complaint_history') }}" class="btn btn-sm btn-outline-primary">View All History</a>
+        </div>
+        <div class="card-body p-0">
+            {% if complaints %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Defect Preview</th>
+                                <th>Ticket ID</th>
+                                <th>Category & Title</th>
+                                <th>AI Detection</th>
+                                <th>Severity</th>
+                                <th>Current Status</th>
+                                <th>Date Filed</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in complaints %}
+                                <tr class="docket-row">
+                                    <td style="width: 80px;">
+                                        <img src="{{ url_for('static', filename='uploads/annotated/' + c.annotated_image) if c.annotated_image else url_for('static', filename='uploads/original/' + c.original_image) }}" 
+                                             class="rounded-3 shadow-sm" style="width: 70px; height: 50px; object-fit: cover;" alt="Thumbnail">
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold font-monospace">{{ c.ticket_number }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold">{{ c.title }}</div>
+                                        <small class="text-muted"><i class="fas fa-map-pin text-danger me-1"></i>{{ c.zone }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if c.final_defect_type == 'Pothole' %}badge-pothole{% elif c.final_defect_type == 'Broken Traffic Sign' %}badge-traffic-sign{% elif c.final_defect_type == 'Garbage Dump' %}badge-garbage{% else %}badge-cracked-road{% endif %}">
+                                            {{ c.final_defect_type }}
+                                        </span>
+                                        {% if c.ai_confidence %}
+                                            <div class="small text-muted font-monospace mt-1">AI: {{ (c.ai_confidence * 100)|int }}%</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'danger' if c.severity == 'Critical' else 'warning' if c.severity == 'High' else 'info' if c.severity == 'Medium' else 'secondary' }}">
+                                            {{ c.severity }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill status-stamp bg-{{ 'success' if c.status == 'Resolved' else 'primary' if c.status == 'Worker Assigned' or c.status == 'In Progress' else 'warning text-dark' }}">
+                                            {{ c.status }}
+                                        </span>
+                                    </td>
+                                    <td class="small text-muted">{{ c.created_at.strftime('%b %d, %Y') }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ url_for('citizen.complaint_status', ticket_number=c.ticket_number) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-search-location me-1"></i> Track
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-clipboard-check fs-1 text-muted mb-3"></i>
+                    <h5>No Complaints Reported Yet</h5>
+                    <p class="text-muted">Help your city maintain safe roads by reporting your first defect.</p>
+                    <a href="{{ url_for('citizen.upload_complaint') }}" class="btn btn-primary">Report Defect Now</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

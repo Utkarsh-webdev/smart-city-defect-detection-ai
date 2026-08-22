@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Field Worker Management - SmartDefect AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="fas fa-hard-hat text-warning me-2"></i>Field Crew & Worker Management</h2>
+            <p class="text-muted mb-0">Deploy and monitor municipal repair crews across city zones.</p>
+        </div>
+        <div class="mt-3 mt-md-0">
+            <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#addWorkerModal">
+                <i class="fas fa-user-plus me-1"></i> Register New Worker
+            </button>
+        </div>
+    </div>
+
+    <!-- Workers Table Card -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-0">
+            {% if workers %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Worker Name</th>
+                                <th>Department</th>
+                                <th>Assigned Zone</th>
+                                <th>Contact Information</th>
+                                <th>Active Tasks</th>
+                                <th>Total Resolved</th>
+                                <th>Availability Status</th>
+                                <th class="text-end">Quick Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for w in workers %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="stat-icon bg-light text-primary me-2" style="width: 40px; height: 40px; font-size: 16px;">
+                                                <i class="fas fa-user-tie"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">{{ w.name }}</div>
+                                                <small class="text-muted">ID: WRK-{{ w.id }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ w.department }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold small">{{ w.zone }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="small"><i class="fas fa-envelope text-muted me-1"></i>{{ w.email }}</div>
+                                        <div class="small"><i class="fas fa-phone text-muted me-1"></i>{{ w.phone }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'danger' if w.active_tasks_count >= 3 else 'warning text-dark' if w.active_tasks_count > 0 else 'success' }} fs-6">
+                                            {{ w.active_tasks_count }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-success font-monospace fs-6">{{ w.total_resolved_count }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if w.status == 'Available' else 'warning text-dark' if w.status == 'Busy' else 'secondary' }}">
+                                            {{ w.status }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <form method="POST" action="{{ url_for('admin.workers') }}" class="d-inline">
+                                            <input type="hidden" name="action" value="toggle_status">
+                                            <input type="hidden" name="worker_id" value="{{ w.id }}">
+                                            <select name="status" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                                <option value="Available" {% if w.status == 'Available' %}selected{% endif %}>Available</option>
+                                                <option value="Busy" {% if w.status == 'Busy' %}selected{% endif %}>Busy</option>
+                                                <option value="On-Leave" {% if w.status == 'On-Leave' %}selected{% endif %}>On-Leave</option>
+                                            </select>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-users-slash fs-1 text-muted mb-3"></i>
+                    <h5>No municipal workers registered yet.</h5>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Add Worker Modal -->
+<div class="modal fade" id="addWorkerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ url_for('admin.workers') }}">
+            <input type="hidden" name="action" value="add">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-user-plus me-2"></i>Register Field Maintenance Worker</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Worker Full Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control" placeholder="e.g. Ramesh Kumar" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Official Email <span class="text-danger">*</span></label>
+                            <input type="email" name="email" class="form-control" placeholder="worker@smartcity.gov" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Phone Number <span class="text-danger">*</span></label>
+                            <input type="tel" name="phone" class="form-control" placeholder="+91 9876543210" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Department</label>
+                            <select name="department" class="form-select">
+                                <option value="Road Works" selected>Road Works</option>
+                                <option value="Sanitation & Waste">Sanitation & Waste</option>
+                                <option value="Traffic Safety">Traffic Safety</option>
+                                <option value="Public Lighting">Public Lighting</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Assigned Zone</label>
+                            <select name="zone" class="form-select">
+                                <option value="Central Zone" selected>Central Zone</option>
+                                <option value="North Zone">North Zone</option>
+                                <option value="South Zone">South Zone</option>
+                                <option value="East Zone">East Zone</option>
+                                <option value="West Zone">West Zone</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Save Worker</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
