@@ -12,16 +12,19 @@ app = create_app(config_name)
 
 if __name__ == '__main__':
     with app.app_context():
-        # Ensure database tables exist
         db.create_all()
         print(">> Database tables initialized successfully.")
-    
+
     port = int(os.environ.get('PORT', 5000))
-    host = os.environ.get('HOST', '127.0.0.1')
-    
-    print(f"\n=======================================================")
-    print(f"  Smart City Defect Detection System (MCA Project)     ")
-    print(f"  Server running on http://{host}:{port}             ")
-    print(f"=======================================================\n")
-    
-    app.run(host=host, port=port, debug=app.config.get('DEBUG', True))
+    host = os.environ.get('HOST', '0.0.0.0')
+
+    print("\n=======================================================")
+    print("  Smart City Defect Detection System (MCA Project)")
+    print(f"  Server running on http://{host}:{port}")
+    print("=======================================================\n")
+
+    app.run(
+        host=host,
+        port=port,
+        debug=app.config.get('DEBUG', False)
+    )
