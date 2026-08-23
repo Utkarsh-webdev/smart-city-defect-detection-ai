@@ -36,3 +36,26 @@ main>.container.py-5{min-height:calc(100vh - 170px);display:flex;align-items:cen
 /* responsive */
 @media(max-width:991.98px){.civic-nav .nav-link{padding:10px 0!important}.civic-actions{padding-bottom:12px}.hero-section .container{padding-top:48px}.workflow{grid-template-columns:1fr 1fr}.workflow-step:nth-child(2){border-right:0}.workflow-step:nth-child(-n+2){border-bottom:1px solid var(--hair)}.registry-row{grid-template-columns:42px 1fr auto}.registry-name{font-size:21px}}
 @media(max-width:575.98px){body{font-size:14px}.civic-brand strong{font-size:21px}.hero-title{font-size:53px}.hero-copy{font-size:15px}.workflow{grid-template-columns:1fr}.workflow-step{border-right:0!important;border-bottom:1px solid var(--hair)!important}.workflow-step:last-child{border-bottom:0!important}.registry-row{grid-template-columns:34px 1fr}.registry-mark{display:none}.footer-grid{flex-direction:column}.footer-meta{align-items:start;text-align:left}.docket-inner{padding-left:39px}.docket:before{width:23px}.docket:after{left:23px}}
+
+.site-main {
+    min-height: 520px;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+.admin-login-page {
+    min-height: 520px;
+    padding: 70px 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.admin-login-card {
+    width: 100%;
+    max-width: 520px;
+    background: #f6f0e3;
+    border: 1px solid #cfc5ae;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
