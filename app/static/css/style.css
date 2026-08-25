@@ -32,7 +32,93 @@ p{color:var(--ink)}.text-muted{color:var(--muted)!important}.text-primary,.text-
 /* forms, timelines, footer */
 .upload-dropzone{border:1px dashed var(--steel);border-radius:0!important;padding:42px 20px;text-align:center;background:var(--paper);cursor:pointer}.upload-dropzone:hover,.upload-dropzone.dragover{border-color:var(--red);background:#f8eae6}.preview-container img{max-height:350px;border-radius:0!important;border:1px solid var(--ink);box-shadow:none!important}.status-timeline{display:flex;justify-content:space-between;position:relative;margin:30px 0}.status-timeline:before{content:"";position:absolute;top:23px;left:25px;right:25px;height:1px;background:var(--line)}.timeline-step{position:relative;z-index:2;text-align:center;flex:1}.step-icon{width:46px;height:46px;border-radius:0!important;background:var(--paper)!important;border:1px solid var(--line);color:var(--muted);display:grid;place-items:center;margin:0 auto 10px}.timeline-step.active .step-icon{border:2px solid var(--red);color:var(--red)}.timeline-step.completed .step-icon{border-color:var(--green);background:var(--green)!important;color:var(--paper)}.site-footer{background:var(--ink);color:var(--paper);border-top:5px solid var(--red);margin-top:45px}.footer-grid{display:flex;justify-content:space-between;gap:30px;padding:25px 0}.footer-title{font:800 24px/.9 var(--display);letter-spacing:.06em}.footer-sub{margin-top:7px;color:#aaa79e;font:500 9px var(--mono)}.footer-meta{display:flex;gap:20px;align-items:end;flex-direction:column;text-align:right;color:#aaa79e;font:600 8px var(--mono);letter-spacing:.08em}.flash-stack{padding-top:15px}.civic-alert{display:flex;align-items:center;gap:12px;border:1px solid var(--line)!important;background:var(--paper-3);color:var(--ink)}.mono-label{font:700 9px var(--mono);letter-spacing:.06em}
 /* auth pages */
-main>.container.py-5{min-height:calc(100vh - 170px);display:flex;align-items:center}.auth-card{border:1px solid var(--ink)!important}.auth-card .card-header{background:var(--ink)!important;color:var(--paper)!important;padding:20px}.auth-card .card-header h4,.auth-card .card-header h5{color:var(--paper)!important}.auth-card .card-header:before{color:var(--amber)}
+main>.container.py-5{
+    min-height:calc(100vh - 170px);
+    display:flex;
+    align-items:center;
+}
+
+.auth-card{
+    width:100%;
+    border:1px solid var(--ink)!important;
+    background:var(--paper-3);
+}
+
+.auth-card .card-header{
+    background:var(--ink)!important;
+    color:var(--paper)!important;
+    padding:20px;
+}
+
+.auth-card .card-header h4,
+.auth-card .card-header h5{
+    color:var(--paper)!important;
+}
+
+.auth-card .card-header:before{
+    color:var(--amber);
+}
+
+/* admin login */
+.admin-login-page{
+    min-height:calc(100vh - 170px);
+    padding:60px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    z-index:1;
+}
+
+.admin-login-card{
+    width:100%;
+    max-width:520px;
+    margin:auto;
+    background:var(--paper-3);
+    color:var(--ink);
+    border:1px solid var(--ink);
+    box-shadow:6px 6px 0 var(--ink);
+}
+
+.admin-login-card .card-header{
+    background:var(--ink)!important;
+    color:var(--paper)!important;
+    border-bottom:1px solid var(--ink)!important;
+    padding:20px;
+}
+
+.admin-login-card .card-header h4,
+.admin-login-card .card-header h5,
+.admin-login-card .card-header h3{
+    color:var(--paper)!important;
+}
+
+.admin-login-card .card-header:before{
+    color:var(--amber);
+}
+
+.admin-login-card .card-body{
+    padding:28px;
+}
+
+.admin-login-card .form-control{
+    width:100%;
+}
+
+.admin-login-card .btn{
+    min-height:42px;
+}
+
+@media(max-width:575.98px){
+    .admin-login-page{
+        min-height:calc(100vh - 130px);
+        padding:35px 14px;
+    }
+
+    .admin-login-card .card-body{
+        padding:20px;
+    }
+}
 /* responsive */
 @media(max-width:991.98px){.civic-nav .nav-link{padding:10px 0!important}.civic-actions{padding-bottom:12px}.hero-section .container{padding-top:48px}.workflow{grid-template-columns:1fr 1fr}.workflow-step:nth-child(2){border-right:0}.workflow-step:nth-child(-n+2){border-bottom:1px solid var(--hair)}.registry-row{grid-template-columns:42px 1fr auto}.registry-name{font-size:21px}}
 @media(max-width:575.98px){body{font-size:14px}.civic-brand strong{font-size:21px}.hero-title{font-size:53px}.hero-copy{font-size:15px}.workflow{grid-template-columns:1fr}.workflow-step{border-right:0!important;border-bottom:1px solid var(--hair)!important}.workflow-step:last-child{border-bottom:0!important}.registry-row{grid-template-columns:34px 1fr}.registry-mark{display:none}.footer-grid{flex-direction:column}.footer-meta{align-items:start;text-align:left}.docket-inner{padding-left:39px}.docket:before{width:23px}.docket:after{left:23px}}
@@ -58,4 +144,2220 @@ main>.container.py-5{min-height:calc(100vh - 170px);display:flex;align-items:cen
     background: #f6f0e3;
     border: 1px solid #cfc5ae;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================================================
+   SMARTDEFECT BASE TEMPLATE — FINAL LAYOUT FIXES
+   ========================================================= */
+
+/* Keep Bootstrap container from creating awkward horizontal overflow */
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    min-height: 100vh;
+}
+
+/* Header */
+.site-header {
+    position: relative;
+    z-index: 1030;
+}
+
+.navbar-custom {
+    width: 100%;
+}
+
+.civic-shell {
+    width: 100%;
+    max-width: 1480px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+/* Prevent authenticated user menu from pushing navbar width */
+.civic-actions {
+    flex-shrink: 0;
+}
+
+.civic-actions .nav-item {
+    flex-shrink: 0;
+}
+
+.user-chip {
+    white-space: nowrap;
+    min-height: 42px;
+}
+
+/* Dropdown must sit above page content */
+.civic-menu {
+    z-index: 2000;
+    min-width: 190px;
+    margin-top: 4px !important;
+}
+
+.civic-menu .dropdown-divider {
+    border-color: var(--hair);
+    margin: 4px 0;
+}
+
+/* Main content must stay below header and inside viewport */
+.site-main {
+    width: 100%;
+    min-height: calc(100vh - 170px);
+    position: relative;
+    z-index: 1;
+}
+
+.site-main > .container,
+.site-main > .container-fluid {
+    position: relative;
+    z-index: 1;
+}
+
+/* Flash messages */
+.flash-stack {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+.civic-alert {
+    margin-bottom: 15px;
+    padding: 11px 14px;
+}
+
+/* Standard Bootstrap cards */
+.card {
+    overflow: hidden;
+}
+
+.card-body {
+    color: var(--ink);
+}
+
+/* Complaint/detail pages */
+.docket {
+    width: 100%;
+}
+
+.docket-inner {
+    min-width: 0;
+}
+
+/* Detail page heading must not collide with status badge */
+.docket .d-flex {
+    min-width: 0;
+}
+
+.docket h1,
+.docket h2,
+.docket h3,
+.docket h4,
+.docket h5,
+.docket h6 {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* Status timeline */
+.status-timeline {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.timeline-step {
+    min-width: 0;
+}
+
+.timeline-step > div,
+.timeline-step span,
+.timeline-step strong {
+    overflow-wrap: anywhere;
+}
+
+/* Maps/images never overflow cards */
+#defectMap,
+#analyticsMap,
+#singleDefectMap,
+.preview-container,
+.preview-container img,
+.card img {
+    max-width: 100%;
+}
+
+/* Footer */
+.site-footer {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+.footer-grid {
+    min-width: 0;
+}
+
+.footer-meta {
+    min-width: 0;
+}
+
+/* Login pages */
+.admin-login-page,
+.auth-card {
+    position: relative;
+    z-index: 2;
+}
+
+/* Mobile navbar */
+@media (max-width: 991.98px) {
+    .civic-shell {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .navbar-custom {
+        min-height: 62px;
+    }
+
+    .navbar-collapse {
+        padding: 8px 0 14px;
+    }
+
+    .civic-nav {
+        width: 100%;
+        margin-bottom: 8px !important;
+    }
+
+    .civic-nav .nav-item {
+        width: 100%;
+    }
+
+    .civic-nav .nav-link {
+        display: block;
+        width: 100%;
+        padding: 11px 10px !important;
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
+    }
+
+    .civic-actions {
+        width: 100%;
+        align-items: stretch !important;
+        gap: 7px;
+    }
+
+    .civic-actions .nav-item {
+        width: 100%;
+    }
+
+    .civic-actions .btn,
+    .civic-actions .user-chip {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .civic-actions .dropdown-menu {
+        position: static !important;
+        transform: none !important;
+        width: 100%;
+        margin-top: 6px !important;
+        box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .hero-section .container {
+        padding-top: 48px;
+        padding-bottom: 45px;
+    }
+
+    .registry-row {
+        gap: 12px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .status-timeline {
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+
+    .timeline-step {
+        min-width: 145px;
+    }
+}
+
+/* Phone */
+@media (max-width: 575.98px) {
+    .civic-shell {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .civic-brand {
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+    }
+
+    .civic-brand strong {
+        font-size: 20px;
+    }
+
+    .civic-brand small {
+        font-size: 7px;
+    }
+
+    .navbar-toggler {
+        flex-shrink: 0;
+    }
+
+    .hero-title {
+        font-size: clamp(42px, 13vw, 58px);
+    }
+
+    .section-frame {
+        padding: 40px 0;
+    }
+
+    .registry-name {
+        font-size: 20px;
+    }
+
+    .workflow {
+        grid-template-columns: 1fr;
+    }
+
+    .workflow-step {
+        min-height: auto;
+        padding: 18px 15px;
+    }
+
+    .status-timeline {
+        display: block;
+        margin: 20px 0;
+    }
+
+    .status-timeline:before {
+        display: none;
+    }
+
+    .timeline-step {
+        display: grid;
+        grid-template-columns: 46px 1fr;
+        gap: 12px;
+        align-items: center;
+        text-align: left;
+        margin-bottom: 14px;
+    }
+
+    .timeline-step:last-child {
+        margin-bottom: 0;
+    }
+
+    .step-icon {
+        margin: 0;
+    }
+
+    .docket-inner {
+        padding-left: 34px;
+    }
+
+    .docket:before {
+        width: 21px;
+    }
+
+    .docket:after {
+        left: 21px;
+    }
+
+    .footer-grid {
+        gap: 18px;
+    }
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+
+/* =========================================================
+   HOME PAGE — FINAL VISUAL FIXES
+   ========================================================= */
+
+/* Hero */
+.hero-section {
+    width: 100%;
+    background: var(--asphalt);
+    overflow: hidden;
+}
+
+.hero-section .container {
+    width: 100%;
+    max-width: 1480px;
+    margin: 0 auto;
+}
+
+.hero-section .row {
+    --bs-gutter-x: 3rem;
+    --bs-gutter-y: 2rem;
+}
+
+.hero-section .col-lg-7,
+.hero-section .col-lg-5 {
+    min-width: 0;
+}
+
+.hero-title {
+    max-width: 850px;
+    overflow-wrap: anywhere;
+}
+
+.hero-copy {
+    max-width: 680px;
+}
+
+.hero-actions .btn {
+    min-height: 48px;
+}
+
+.hero-ledger {
+    width: 100%;
+    max-width: 560px;
+    margin-left: auto;
+    overflow: hidden;
+}
+
+.hero-ledger-body {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.hero-ledger-stub {
+    z-index: 2;
+}
+
+/* Registry */
+.registry-list {
+    width: 100%;
+}
+
+.registry-row {
+    width: 100%;
+    min-width: 0;
+}
+
+.registry-row > div:nth-child(2) {
+    min-width: 0;
+}
+
+.registry-name,
+.registry-desc {
+    overflow-wrap: anywhere;
+}
+
+.registry-mark {
+    flex-shrink: 0;
+}
+
+/* Workflow */
+.workflow {
+    width: 100%;
+    overflow: hidden;
+}
+
+.workflow-step {
+    min-width: 0;
+}
+
+.workflow-step h4 {
+    overflow-wrap: anywhere;
+}
+
+/* Map controls */
+.section-frame .form-select {
+    width: auto;
+    min-width: 150px;
+    min-height: 38px;
+}
+
+.map-frame {
+    width: 100%;
+    overflow: hidden;
+}
+
+.map-toolbar {
+    min-width: 0;
+}
+
+.map-toolbar > span {
+    min-width: 0;
+}
+
+.map-toolbar > span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#defectMap {
+    width: 100%;
+    height: 500px;
+}
+
+/* Home page section spacing */
+.section-frame:last-child {
+    padding-bottom: 70px;
+}
+
+/* Tablet */
+@media (max-width: 991.98px) {
+    .hero-section .row {
+        --bs-gutter-x: 1.5rem;
+        --bs-gutter-y: 2.5rem;
+    }
+
+    .hero-ledger {
+        max-width: none;
+        margin-left: 0;
+    }
+
+    .section-frame {
+        padding: 48px 0;
+    }
+
+    .section-frame .row.align-items-end {
+        row-gap: 14px;
+    }
+
+    .section-frame .form-select {
+        min-width: 135px;
+    }
+
+    .map-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .map-toolbar > span:first-child {
+        max-width: 100%;
+    }
+}
+
+/* Phone */
+@media (max-width: 575.98px) {
+    .hero-section .container {
+        padding-top: 38px;
+        padding-bottom: 42px;
+    }
+
+    .hero-index {
+        font-size: 8px;
+        line-height: 1.7;
+    }
+
+    .hero-kicker {
+        font-size: 9px;
+        line-height: 1.5;
+    }
+
+    .hero-title {
+        font-size: clamp(43px, 14vw, 58px);
+        line-height: .9;
+        margin-bottom: 18px;
+    }
+
+    .hero-copy {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .hero-actions {
+        width: 100%;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .hero-ledger {
+        margin-top: 4px;
+    }
+
+    .hero-ledger-head {
+        font-size: 8px;
+        gap: 10px;
+    }
+
+    .hero-ledger-body {
+        padding: 13px 11px;
+        font-size: 9px;
+    }
+
+    .hero-ledger-stub {
+        font-size: 7px;
+    }
+
+    .section-frame {
+        padding: 38px 0;
+    }
+
+    .section-title {
+        font-size: clamp(32px, 10vw, 46px);
+    }
+
+    .registry-row {
+        grid-template-columns: 30px 1fr;
+        gap: 10px;
+        padding: 15px 0;
+    }
+
+    .registry-mark {
+        display: none;
+    }
+
+    .registry-name {
+        font-size: 21px;
+    }
+
+    .registry-desc {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .workflow-step {
+        padding: 18px 15px;
+    }
+
+    .workflow-step h4 {
+        margin: 14px 0 7px;
+        font-size: 24px;
+    }
+
+    .workflow-step p {
+        font-size: 11px;
+    }
+
+    .section-frame > .container > .d-flex {
+        align-items: stretch !important;
+    }
+
+    .section-frame > .container > .d-flex > .d-flex {
+        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .section-frame .form-select {
+        width: 100%;
+        min-width: 0;
+        font-size: 9px;
+    }
+
+    .map-toolbar {
+        padding: 9px 10px;
+    }
+
+    .map-toolbar > span {
+        width: 100%;
+    }
+
+    .map-toolbar > span:first-child {
+        white-space: normal;
+        line-height: 1.4;
+    }
+
+    #defectMap {
+        height: 380px;
+    }
+}
+
+
+/* =========================================================
+   COMPLAINT STATUS PAGE — FINAL FIXES
+   ========================================================= */
+
+/* Page wrapper */
+.site-main > .container.py-4 {
+    width: 100%;
+    max-width: 1480px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+}
+
+/* Top ticket row */
+.site-main > .container.py-4 > .d-flex.justify-content-between {
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.site-main > .container.py-4 > .d-flex.justify-content-between .badge {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+/* Complaint main docket */
+.site-main > .container.py-4 .docket {
+    border: 1px solid var(--ink) !important;
+    border-radius: 0 !important;
+    background: var(--paper-3);
+    box-shadow: none !important;
+}
+
+.site-main > .container.py-4 .docket .card-body {
+    padding: 28px !important;
+}
+
+/* Complaint heading */
+.site-main > .container.py-4 .docket h3 {
+    font-size: clamp(28px, 3vw, 44px);
+    line-height: .95;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.site-main > .container.py-4 .docket .border-bottom {
+    border-color: var(--hair) !important;
+}
+
+/* Status badge */
+.site-main > .container.py-4 .docket .fs-6 {
+    border-radius: 0 !important;
+    font: 700 10px var(--mono);
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+/* Timeline */
+.site-main > .container.py-4 .status-timeline {
+    min-height: 105px;
+    margin: 26px 0 4px;
+}
+
+.site-main > .container.py-4 .timeline-step {
+    min-width: 0;
+}
+
+.site-main > .container.py-4 .step-icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 10px;
+}
+
+.site-main > .container.py-4 .step-label {
+    font: 500 13px var(--body);
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+.site-main > .container.py-4 .timeline-step.active .step-icon {
+    border-color: var(--amber);
+    color: var(--amber);
+}
+
+.site-main > .container.py-4 .timeline-step.completed .step-icon {
+    background: var(--green) !important;
+    border-color: var(--green);
+}
+
+/* Details grid */
+.site-main > .container.py-4 > .row {
+    --bs-gutter-x: 24px;
+    --bs-gutter-y: 24px;
+}
+
+.site-main > .container.py-4 > .row > [class*="col-"] {
+    min-width: 0;
+}
+
+/* Image tabs */
+#imageTabs {
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+#imageTabs .nav-link {
+    border-radius: 0 !important;
+    color: var(--steel);
+    background: transparent;
+    border: 1px solid transparent;
+    font-size: 11px;
+    padding: 9px 12px;
+}
+
+#imageTabs .nav-link:hover {
+    border-color: var(--line);
+    background: var(--paper-2);
+}
+
+#imageTabs .nav-link.active {
+    background: var(--steel) !important;
+    color: var(--paper) !important;
+    border-color: var(--steel);
+}
+
+/* Complaint images */
+#imageTabsContent img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 420px;
+    height: auto;
+    margin: 0 auto;
+    object-fit: contain;
+    border-radius: 0 !important;
+    border-color: var(--line) !important;
+}
+
+/* Image card */
+.site-main > .container.py-4 .card-body.text-center {
+    overflow: hidden;
+}
+
+/* Mini map */
+#singleDefectMap {
+    width: 100%;
+    height: 280px;
+    min-height: 280px;
+}
+
+/* Map text */
+#singleDefectMap + .small {
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+/* AI inspection list */
+.site-main > .container.py-4 .list-group-item {
+    background: transparent !important;
+    border-bottom: 1px solid var(--hair);
+    min-height: 48px;
+    gap: 14px;
+}
+
+.site-main > .container.py-4 .list-group-item:last-child {
+    border-bottom: 0;
+}
+
+.site-main > .container.py-4 .list-group-item > span:first-child {
+    min-width: 0;
+}
+
+.site-main > .container.py-4 .list-group-item > span:last-child {
+    flex-shrink: 0;
+    text-align: right;
+}
+
+/* Citizen description */
+.site-main > .container.py-4 .bg-light {
+    background: var(--paper-2) !important;
+    border: 1px solid var(--hair);
+    border-radius: 0 !important;
+}
+
+/* Worker card */
+.site-main > .container.py-4 .stat-icon {
+    flex: 0 0 45px;
+}
+
+/* Resolution */
+.site-main > .container.py-4 .bg-success.bg-opacity-10 {
+    background: rgba(61, 107, 79, .08) !important;
+    border: 1px solid var(--green) !important;
+}
+
+/* Star rating */
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.star-rating input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+    color: var(--line);
+    font-size: 22px;
+    line-height: 1;
+    transition: color .12s ease;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: var(--amber);
+}
+
+/* Form inside complaint card */
+.site-main > .container.py-4 textarea.form-control {
+    resize: vertical;
+    min-height: 70px;
+}
+
+/* Leaflet controls */
+#singleDefectMap .leaflet-control-zoom a,
+#singleDefectMap .leaflet-control-attribution {
+    border-radius: 0 !important;
+}
+
+#singleDefectMap .leaflet-control-zoom a {
+    color: var(--ink);
+    background: var(--paper-3);
+}
+
+/* Tablet */
+@media (max-width: 991.98px) {
+    .site-main > .container.py-4 {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    .site-main > .container.py-4 .docket .card-body {
+        padding: 22px !important;
+    }
+
+    .site-main > .container.py-4 .status-timeline {
+        margin-top: 20px;
+    }
+
+    .site-main > .container.py-4 .step-label {
+        font-size: 12px;
+    }
+}
+
+/* Phone */
+@media (max-width: 575.98px) {
+    .site-main > .container.py-4 {
+        padding: 22px 12px !important;
+    }
+
+    .site-main > .container.py-4 .docket .card-body {
+        padding: 16px !important;
+    }
+
+    .site-main > .container.py-4 .docket h3 {
+        font-size: 30px;
+    }
+
+    .site-main > .container.py-4 > .d-flex.justify-content-between {
+        align-items: stretch !important;
+    }
+
+    .site-main > .container.py-4 > .d-flex.justify-content-between > * {
+        width: 100%;
+    }
+
+    .site-main > .container.py-4 > .d-flex.justify-content-between .badge {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+
+    /* Replace horizontal timeline with vertical flow */
+    .site-main > .container.py-4 .status-timeline {
+        display: block;
+        min-height: 0;
+        margin: 20px 0 0;
+    }
+
+    .site-main > .container.py-4 .status-timeline:before {
+        display: block;
+        top: 23px;
+        bottom: 23px;
+        left: 23px;
+        right: auto;
+        width: 1px;
+        height: auto;
+    }
+
+    .site-main > .container.py-4 .timeline-step {
+        display: grid;
+        grid-template-columns: 46px 1fr;
+        align-items: center;
+        gap: 12px;
+        min-height: 62px;
+        text-align: left;
+    }
+
+    .site-main > .container.py-4 .timeline-step .step-icon {
+        margin: 0;
+        background: var(--paper-3) !important;
+    }
+
+    .site-main > .container.py-4 .timeline-step.completed .step-icon {
+        background: var(--green) !important;
+        color: var(--paper);
+    }
+
+    .site-main > .container.py-4 .step-label {
+        white-space: normal;
+        font-size: 12px;
+    }
+
+    #imageTabs {
+        width: 100%;
+    }
+
+    #imageTabs .nav-item {
+        flex: 1 1 100%;
+    }
+
+    #imageTabs .nav-link {
+        width: 100%;
+        text-align: left;
+    }
+
+    #singleDefectMap {
+        height: 240px;
+        min-height: 240px;
+    }
+
+    .site-main > .container.py-4 .list-group-item {
+        align-items: flex-start !important;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .site-main > .container.py-4 .list-group-item > span:last-child {
+        text-align: left;
+    }
+
+    .site-main > .container.py-4 .d-flex.align-items-center.mb-3 {
+        align-items: flex-start !important;
+    }
+}
+
+
+/* =========================================================
+   CITIZEN DASHBOARD — FINAL DESIGN LAYER
+   Scoped with :has() so complaint page stays untouched.
+   ========================================================= */
+
+.site-main > .container.py-4:has(.stat-card) {
+    width: 100%;
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 34px 24px 60px !important;
+}
+
+/* Dashboard header */
+.site-main > .container.py-4:has(.stat-card) > .d-flex:first-child {
+    gap: 24px;
+    align-items: flex-end !important;
+    margin-bottom: 28px !important;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+}
+
+.site-main > .container.py-4:has(.stat-card) > .d-flex:first-child::before {
+    content: "01 / CITIZEN OPERATIONS";
+    position: absolute;
+    left: 0;
+    top: -13px;
+    color: var(--red);
+    font: 700 8px var(--mono);
+    letter-spacing: .12em;
+}
+
+.site-main > .container.py-4:has(.stat-card) > .d-flex:first-child h2 {
+    margin: 0 0 6px !important;
+    font-size: clamp(38px, 4vw, 58px);
+    line-height: .9;
+}
+
+.site-main > .container.py-4:has(.stat-card) > .d-flex:first-child p {
+    margin: 0 !important;
+    font-size: 13px;
+}
+
+.site-main > .container.py-4:has(.stat-card) > .d-flex:first-child .btn {
+    min-height: 46px;
+    padding: 11px 20px !important;
+    white-space: nowrap;
+    font: 700 10px var(--mono);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+/* Stat grid */
+.site-main > .container.py-4:has(.stat-card) .row.g-3 {
+    --bs-gutter-x: 14px;
+    --bs-gutter-y: 14px;
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-card {
+    min-height: 128px;
+    padding: 18px !important;
+    border: 1px solid var(--ink) !important;
+    background: var(--paper-3);
+    overflow: hidden;
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-card::before {
+    content: "FIELD METRIC";
+    position: absolute;
+    top: 9px;
+    right: 12px;
+    color: var(--muted);
+    font: 700 7px var(--mono);
+    letter-spacing: .09em;
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-card::after {
+    width: 4px;
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-card .text-muted {
+    font: 700 8px var(--mono);
+    letter-spacing: .08em;
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-card h3 {
+    margin-top: 8px !important;
+    font: 800 42px/.9 var(--display);
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-icon {
+    width: 44px;
+    height: 44px;
+    margin-top: 14px;
+}
+
+/* Metric colors */
+.site-main > .container.py-4:has(.stat-card) .stat-card:nth-child(1) .stat-icon {
+    color: var(--steel);
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-card:nth-child(2) .stat-icon {
+    color: var(--amber);
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-card:nth-child(3) .stat-icon {
+    color: var(--steel);
+}
+
+.site-main > .container.py-4:has(.stat-card) .stat-card:nth-child(4) .stat-icon {
+    color: var(--green);
+}
+
+/* Recent reports card */
+.site-main > .container.py-4:has(.stat-card) > .card:last-child {
+    border: 1px solid var(--ink) !important;
+    border-radius: 0 !important;
+    background: var(--paper-3);
+    overflow: hidden;
+}
+
+.site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header {
+    min-height: 66px;
+    padding: 14px 18px !important;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--ink) !important;
+    color: var(--paper);
+    border: 0 !important;
+}
+
+.site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header::before {
+    content: "02 / LIVE REGISTER";
+    flex: 0 0 auto;
+    margin: 0;
+    color: var(--amber);
+}
+
+.site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header h5 {
+    color: var(--paper);
+    font: 700 12px var(--mono);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header h5 i {
+    color: var(--amber) !important;
+}
+
+.site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header .btn {
+    margin-left: auto;
+    color: var(--paper) !important;
+    border-color: #77776f !important;
+    font: 700 9px var(--mono);
+}
+
+/* Table */
+.site-main > .container.py-4:has(.stat-card) .table-responsive {
+    border: 0 !important;
+    overflow-x: auto;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table {
+    min-width: 1060px;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table thead th {
+    height: 40px;
+    padding: 10px 11px !important;
+    font-size: 8px;
+    white-space: nowrap;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table tbody tr {
+    min-height: 84px;
+    background: var(--paper-3);
+    border-left: 4px solid transparent;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table tbody tr:hover {
+    background: #fffdf7 !important;
+    border-left-color: var(--amber);
+}
+
+.site-main > .container.py-4:has(.stat-card) .table tbody td {
+    padding: 12px 11px !important;
+    border-bottom: 1px solid var(--hair);
+    vertical-align: middle;
+}
+
+/* Column widths */
+.site-main > .container.py-4:has(.stat-card) .table th:nth-child(1),
+.site-main > .container.py-4:has(.stat-card) .table td:nth-child(1) {
+    width: 9%;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table th:nth-child(2),
+.site-main > .container.py-4:has(.stat-card) .table td:nth-child(2) {
+    width: 13%;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table th:nth-child(3),
+.site-main > .container.py-4:has(.stat-card) .table td:nth-child(3) {
+    width: 27%;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table th:nth-child(4),
+.site-main > .container.py-4:has(.stat-card) .table td:nth-child(4) {
+    width: 14%;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table th:nth-child(5),
+.site-main > .container.py-4:has(.stat-card) .table td:nth-child(5) {
+    width: 9%;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table th:nth-child(6),
+.site-main > .container.py-4:has(.stat-card) .table td:nth-child(6) {
+    width: 13%;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table th:nth-child(7),
+.site-main > .container.py-4:has(.stat-card) .table td:nth-child(7) {
+    width: 9%;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table th:nth-child(8),
+.site-main > .container.py-4:has(.stat-card) .table td:nth-child(8) {
+    width: 6%;
+}
+
+/* Preview image */
+.site-main > .container.py-4:has(.stat-card) .table tbody td:first-child img {
+    width: 70px !important;
+    height: 54px !important;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    border: 1px solid var(--ink);
+    border-radius: 0 !important;
+    background: var(--asphalt);
+    box-shadow: none !important;
+}
+
+/* Ticket */
+.site-main > .container.py-4:has(.stat-card) .table tbody td:nth-child(2) .font-monospace {
+    display: inline-block;
+    padding: 7px 8px;
+    border: 1px solid var(--ink);
+    background: var(--paper-2);
+    font-size: 9px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+/* Title + zone */
+.site-main > .container.py-4:has(.stat-card) .table tbody td:nth-child(3) .fw-bold {
+    display: block;
+    margin-bottom: 5px;
+    font: 800 16px/1.05 var(--body);
+    overflow-wrap: anywhere;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table tbody td:nth-child(3) small {
+    display: block;
+    font-size: 10px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+/* AI detection */
+.site-main > .container.py-4:has(.stat-card) .table tbody td:nth-child(4) .badge {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 8px;
+}
+
+.site-main > .container.py-4:has(.stat-card) .table tbody td:nth-child(4) .small {
+    font-size: 9px;
+}
+
+/* Severity */
+.site-main > .container.py-4:has(.stat-card) .table tbody td:nth-child(5) .badge {
+    white-space: nowrap;
+    font-size: 8px;
+}
+
+/* Status */
+.site-main > .container.py-4:has(.stat-card) .status-stamp {
+    white-space: nowrap;
+    transform: rotate(-2deg);
+    padding: 6px 8px !important;
+}
+
+/* Date */
+.site-main > .container.py-4:has(.stat-card) .table tbody td:nth-child(7) {
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+/* Track */
+.site-main > .container.py-4:has(.stat-card) .table tbody td:nth-child(8) .btn {
+    min-width: 70px;
+    padding: 8px 9px;
+    font: 700 9px var(--mono);
+    white-space: nowrap;
+}
+
+/* Empty state */
+.site-main > .container.py-4:has(.stat-card) .text-center.py-5 {
+    padding: 60px 20px !important;
+    background: var(--paper-3);
+    border-top: 1px solid var(--hair);
+}
+
+.site-main > .container.py-4:has(.stat-card) .text-center.py-5 i {
+    color: var(--steel) !important;
+}
+
+/* Tablet */
+@media (max-width: 991.98px) {
+    .site-main > .container.py-4:has(.stat-card) {
+        padding: 28px 16px 50px !important;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .d-flex:first-child {
+        align-items: flex-start !important;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .d-flex:first-child .btn {
+        margin-top: 0 !important;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) .stat-card {
+        min-height: 115px;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) .stat-card h3 {
+        font-size: 36px;
+    }
+}
+
+/* Phone */
+@media (max-width: 575.98px) {
+    .site-main > .container.py-4:has(.stat-card) {
+        padding: 24px 12px 42px !important;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .d-flex:first-child {
+        display: block !important;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .d-flex:first-child h2 {
+        font-size: 40px;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .d-flex:first-child .btn {
+        width: 100%;
+        margin-top: 16px !important;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) .row.g-3 > [class*="col-"] {
+        width: 50%;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) .stat-card {
+        min-height: 118px;
+        padding: 14px !important;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) .stat-card::before {
+        display: none;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) .stat-card h3 {
+        font-size: 34px;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) .stat-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 15px;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header {
+        display: block;
+        padding: 16px !important;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header::before {
+        display: block;
+        margin-bottom: 7px;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header h5 {
+        margin-bottom: 12px;
+        font-size: 11px;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) > .card:last-child .card-header .btn {
+        width: 100%;
+        margin: 0;
+    }
+
+    .site-main > .container.py-4:has(.stat-card) .table {
+        min-width: 1060px;
+    }
+}
+
+
+/* =========================================================
+   COMPLAINT HISTORY — FINAL RE-FIX
+   Targets history page only.
+   ========================================================= */
+
+.site-main > .container.py-4:has(.nav.nav-pills) {
+    width: 100%;
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 34px 24px 60px !important;
+}
+
+/* Header */
+.site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child {
+    display: flex;
+    align-items: flex-end !important;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 30px !important;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child::before {
+    content: "01 / CIVIC CASE ARCHIVE";
+    position: absolute;
+    left: 0;
+    top: -13px;
+    color: var(--red);
+    font: 700 8px var(--mono);
+    letter-spacing: .12em;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) h2 {
+    margin: 0 0 7px !important;
+    font-size: clamp(40px, 4.5vw, 62px);
+    line-height: .88;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child p {
+    max-width: 680px;
+    margin: 0 !important;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child .btn {
+    flex: 0 0 auto;
+    min-height: 46px;
+    padding: 11px 20px !important;
+    white-space: nowrap;
+    font: 700 10px var(--mono);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+/* =========================================================
+   FILTER TABS
+   ========================================================= */
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills {
+    position: relative;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
+    max-width: 920px;
+    min-height: 58px;
+    margin: 0 0 28px !important;
+    padding: 4px;
+    gap: 4px;
+    border: 1px solid var(--ink);
+    border-radius: 0 !important;
+    background: var(--ink);
+    box-shadow: 4px 4px 0 var(--paper-2);
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills::before {
+    content: "FILTER / STATUS";
+    position: absolute;
+    left: 0;
+    top: -18px;
+    color: var(--red);
+    font: 700 8px var(--mono);
+    letter-spacing: .1em;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-item {
+    min-width: 0;
+    margin: 0;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link {
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 9px;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #aaa79e !important;
+    font: 700 9px/1.15 var(--mono);
+    letter-spacing: .035em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background .12s ease, color .12s ease;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    flex: 0 0 5px;
+    border: 1px solid currentColor;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link:hover {
+    color: var(--paper) !important;
+    background: #292a27 !important;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link.active {
+    color: var(--ink) !important;
+    background: var(--paper-3) !important;
+    box-shadow: inset 0 -3px 0 var(--amber);
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link.active::before {
+    background: var(--amber);
+    border-color: var(--amber);
+}
+
+/* =========================================================
+   HISTORY RECORD PANEL
+   ========================================================= */
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .card {
+    width: 100%;
+    border: 1px solid var(--ink) !important;
+    border-radius: 0 !important;
+    background: var(--paper-3);
+    box-shadow: 0 0 0 0 transparent !important;
+    overflow: hidden;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .card .card-body {
+    padding: 0 !important;
+}
+
+/* Table frame */
+.site-main > .container.py-4:has(.nav.nav-pills) .table-responsive {
+    width: 100%;
+    border: 0 !important;
+    overflow-x: auto;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table {
+    width: 100%;
+    min-width: 1100px;
+    table-layout: fixed;
+    margin: 0;
+}
+
+/* Column widths */
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(1),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(1) {
+    width: 9%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(2),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(2) {
+    width: 13%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(3),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(3) {
+    width: 29%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(4),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(4) {
+    width: 12%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(5),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(5) {
+    width: 9%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(6),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(6) {
+    width: 13%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(7),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(7) {
+    width: 9%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(8),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(8) {
+    width: 6%;
+}
+
+/* Header */
+.site-main > .container.py-4:has(.nav.nav-pills) .table thead th {
+    height: 42px;
+    padding: 10px 11px !important;
+    background: var(--ink) !important;
+    color: var(--paper) !important;
+    border: 0 !important;
+    font: 700 8px var(--mono);
+    letter-spacing: .075em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Body rows */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody tr {
+    height: 88px;
+    background: var(--paper-3);
+    border-left: 4px solid transparent;
+    transition: background .12s ease, border-color .12s ease;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody tr:hover {
+    background: #fffdf7 !important;
+    border-left-color: var(--amber);
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td {
+    padding: 12px 11px !important;
+    border-bottom: 1px solid var(--hair);
+    vertical-align: middle;
+}
+
+/* Thumbnail */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:first-child {
+    text-align: center;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:first-child img {
+    width: 72px !important;
+    height: 56px !important;
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+    border: 1px solid var(--ink);
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: var(--asphalt);
+}
+
+/* Ticket stub */
+.site-main > .container.py-4:has(.nav.nav-pills) .ticket-stub {
+    display: inline-block;
+    min-width: 118px;
+    max-width: 100%;
+    padding: 8px 8px;
+    background: var(--paper-2);
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    font: 700 9px/1.25 var(--mono);
+    overflow-wrap: anywhere;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .ticket-stub::before {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--red);
+    font: 700 7px var(--mono);
+    letter-spacing: .11em;
+}
+
+/* Defect + address */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(3) .fw-bold {
+    display: block;
+    margin-bottom: 5px;
+    font: 800 17px/1.08 var(--body);
+    color: var(--ink);
+    overflow-wrap: anywhere;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(3) .small {
+    display: block;
+    max-width: 100%;
+    color: var(--muted) !important;
+    font-size: 10px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(3) i {
+    color: var(--red) !important;
+}
+
+/* AI defect badge */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(4) .badge {
+    display: inline-block;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    font-size: 8px;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(4) .small {
+    display: block;
+    font-size: 10px;
+    color: var(--muted) !important;
+}
+
+/* Severity */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(5) .badge {
+    white-space: nowrap;
+    font-size: 8px;
+}
+
+/* Status stamp */
+.site-main > .container.py-4:has(.nav.nav-pills) .status-stamp {
+    display: inline-block !important;
+    white-space: nowrap;
+    transform: rotate(-2deg);
+    padding: 6px 8px !important;
+    border: 2px solid currentColor !important;
+    background: transparent !important;
+    color: var(--ink) !important;
+    font: 800 8px var(--mono) !important;
+    letter-spacing: .055em;
+    text-transform: uppercase;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .status-stamp.bg-success {
+    color: var(--green) !important;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .status-stamp.bg-primary {
+    color: var(--steel) !important;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .status-stamp.bg-warning {
+    color: var(--amber) !important;
+}
+
+/* Date */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(7) {
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+/* Track */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(8) {
+    text-align: right;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(8) .btn {
+    min-width: 72px;
+    padding: 8px 9px;
+    border-radius: 0 !important;
+    font: 700 9px var(--mono);
+    white-space: nowrap;
+}
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.site-main > .container.py-4:has(.nav.nav-pills) .card-footer {
+    min-height: 64px;
+    padding: 12px 16px !important;
+    background: var(--paper-2) !important;
+    border-top: 1px solid var(--ink) !important;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .pagination {
+    gap: 4px;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .pagination .page-item {
+    margin: 0;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .pagination .page-link {
+    min-width: 34px;
+    min-height: 32px;
+    display: grid;
+    place-items: center;
+    padding: 6px 9px;
+    border: 1px solid var(--line);
+    border-radius: 0 !important;
+    background: var(--paper-3);
+    color: var(--ink);
+    font: 700 9px var(--mono);
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .pagination .page-link:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .pagination .page-item.active .page-link {
+    background: var(--steel) !important;
+    color: var(--paper) !important;
+    border-color: var(--steel) !important;
+}
+
+/* Empty state */
+.site-main > .container.py-4:has(.nav.nav-pills) .text-center.py-5 {
+    padding: 70px 20px !important;
+    background: var(--paper-3);
+    border-top: 1px solid var(--hair);
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .text-center.py-5 i {
+    color: var(--steel) !important;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+    .site-main > .container.py-4:has(.nav.nav-pills) {
+        padding: 28px 16px 50px !important;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child {
+        align-items: flex-start !important;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills {
+        max-width: 100%;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) .table {
+        min-width: 1050px;
+    }
+}
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+    .site-main > .container.py-4:has(.nav.nav-pills) {
+        padding: 24px 12px 42px !important;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child {
+        display: block !important;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) h2 {
+        font-size: 40px;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child .btn {
+        width: 100%;
+        margin-top: 16px !important;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills {
+        grid-template-columns: 1fr 1fr;
+        max-width: 100%;
+        min-height: 0;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link {
+        min-height: 44px;
+        padding: 8px 5px;
+        font-size: 8px;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link::before {
+        width: 4px;
+        height: 4px;
+        flex-basis: 4px;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) .table {
+        min-width: 1050px;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) .table tbody tr {
+        height: 82px;
+    }
+}
+
+
+/* =========================================================
+   COMPLAINT HISTORY — POLISHED DESKTOP REDESIGN
+   ========================================================= */
+
+/* Reset over-heavy previous history treatment */
+.site-main > .container.py-4:has(.nav.nav-pills) {
+    max-width: 1440px;
+    padding-top: 30px !important;
+    padding-bottom: 52px !important;
+}
+
+/* Header becomes compact municipal page heading */
+.site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child {
+    align-items: end !important;
+    margin-bottom: 24px !important;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--hair);
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child::before {
+    content: "CITIZEN PORTAL  /  CASE ARCHIVE";
+    top: -12px;
+    color: var(--muted);
+    letter-spacing: .09em;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) h2 {
+    font-size: clamp(34px, 3.4vw, 50px);
+    letter-spacing: .015em;
+    margin-bottom: 8px !important;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child p {
+    max-width: 720px;
+    font-size: 12px;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child .btn {
+    min-height: 44px;
+    padding: 10px 18px !important;
+}
+
+/* ---------------------------------------------------------
+   FILTER BAR — compact, quiet, intentional
+   --------------------------------------------------------- */
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills {
+    display: inline-grid !important;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    width: auto;
+    max-width: none;
+    min-height: 0;
+    margin: 0 0 24px !important;
+    padding: 0;
+    gap: 0;
+    border: 1px solid var(--ink);
+    background: var(--paper-3);
+    box-shadow: none;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills::before {
+    content: "FILTER / STATUS";
+    top: -15px;
+    color: var(--red);
+    font-size: 7px;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-item {
+    border-right: 1px solid var(--line);
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-item:last-child {
+    border-right: 0;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link {
+    min-height: 42px;
+    padding: 9px 16px;
+    color: var(--muted) !important;
+    background: transparent !important;
+    font: 700 9px/1 var(--mono);
+    letter-spacing: .045em;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link::before {
+    width: 4px;
+    height: 4px;
+    flex-basis: 4px;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link:hover {
+    color: var(--ink) !important;
+    background: var(--paper-2) !important;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-link.active {
+    color: var(--paper) !important;
+    background: var(--steel) !important;
+    box-shadow: none;
+}
+
+/* ---------------------------------------------------------
+   RECORD TABLE
+   --------------------------------------------------------- */
+
+.site-main > .container.py-4:has(.nav.nav-pills) > .card {
+    border: 1px solid var(--line) !important;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table {
+    min-width: 0;
+    table-layout: fixed;
+}
+
+/* Better column balance: always keep Action visible */
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(1),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(1) {
+    width: 8%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(2),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(2) {
+    width: 12%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(3),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(3) {
+    width: 27%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(4),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(4) {
+    width: 12%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(5),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(5) {
+    width: 8%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(6),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(6) {
+    width: 13%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(7),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(7) {
+    width: 10%;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table th:nth-child(8),
+.site-main > .container.py-4:has(.nav.nav-pills) .table td:nth-child(8) {
+    width: 10%;
+}
+
+/* Header */
+.site-main > .container.py-4:has(.nav.nav-pills) .table thead th {
+    height: 38px;
+    padding: 9px 10px !important;
+    font-size: 7px;
+    letter-spacing: .065em;
+}
+
+/* Rows */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody tr {
+    height: 76px;
+    border-left-width: 3px;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td {
+    padding: 9px 10px !important;
+}
+
+/* Photo */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:first-child img {
+    width: 58px !important;
+    height: 50px !important;
+}
+
+/* Ticket */
+.site-main > .container.py-4:has(.nav.nav-pills) .ticket-stub {
+    min-width: 106px;
+    padding: 7px 7px;
+    font-size: 8px;
+}
+
+/* Title */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(3) .fw-bold {
+    font-size: 15px;
+    line-height: 1.08;
+    margin-bottom: 4px;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(3) .small {
+    font-size: 9px;
+}
+
+/* AI */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(4) .badge {
+    font-size: 7px;
+    padding: 5px 6px;
+}
+
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(4) .small {
+    font-size: 9px;
+}
+
+/* Severity */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(5) .badge {
+    font-size: 7px;
+    padding: 5px 6px;
+}
+
+/* Status */
+.site-main > .container.py-4:has(.nav.nav-pills) .status-stamp {
+    font-size: 7px !important;
+    letter-spacing: .04em;
+    padding: 5px 6px !important;
+}
+
+/* Date */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(7) {
+    font-size: 9px;
+}
+
+/* Action */
+.site-main > .container.py-4:has(.nav.nav-pills) .table tbody td:nth-child(8) .btn {
+    min-width: 68px;
+    padding: 7px 8px;
+    font-size: 8px;
+}
+
+/* Pagination */
+.site-main > .container.py-4:has(.nav.nav-pills) .card-footer {
+    min-height: 56px;
+    padding: 10px 14px !important;
+}
+
+/* ---------------------------------------------------------
+   TABLET / PHONE
+   --------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+    .site-main > .container.py-4:has(.nav.nav-pills) .table {
+        min-width: 980px;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills {
+        grid-template-columns: repeat(4, minmax(125px, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .site-main > .container.py-4:has(.nav.nav-pills) {
+        padding: 22px 12px 40px !important;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child {
+        display: block !important;
+        padding-bottom: 16px;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) h2 {
+        font-size: 38px;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .d-flex:first-child .btn {
+        width: 100%;
+        margin-top: 14px !important;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills {
+        display: grid !important;
+        width: 100%;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-item {
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-item:nth-child(2n) {
+        border-right: 0;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) > .nav.nav-pills .nav-item:nth-last-child(-n+2) {
+        border-bottom: 0;
+    }
+
+    .site-main > .container.py-4:has(.nav.nav-pills) .table {
+        min-width: 980px;
+    }
 }
