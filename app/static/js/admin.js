@@ -4,19 +4,27 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const bindAssignWorker = (button) => {
+        const form = document.getElementById('assignWorkerForm');
+        if (!form || !button) return;
+
+        form.action = button.dataset.action || `/admin/complaint/${button.dataset.complaintId}/assign`;
+
+        const modalTicket = document.getElementById('assignModalTicket');
+        if (modalTicket) modalTicket.textContent = button.dataset.ticket || '';
+    };
+
+    document.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-bs-target="#assignWorkerModal"]');
+        if (button) bindAssignWorker(button);
+    });
+
     // 1. Assign Worker Modal Data Binding
     const assignModal = document.getElementById('assignWorkerModal');
     if (assignModal) {
         assignModal.addEventListener('show.bs.modal', (event) => {
             const button = event.relatedTarget;
-            const complaintId = button.getAttribute('data-complaint-id');
-            const ticket = button.getAttribute('data-ticket');
-            
-            const form = document.getElementById('assignWorkerForm');
-            form.action = `/admin/complaint/${complaintId}/assign`;
-            
-            const modalTicket = document.getElementById('assignModalTicket');
-            if (modalTicket) modalTicket.textContent = ticket;
+            bindAssignWorker(button);
         });
     }
 

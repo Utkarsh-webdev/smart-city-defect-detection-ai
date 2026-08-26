@@ -1882,6 +1882,11 @@ pre,
   padding-right: 24px !important;
 }
 
+.site-main > .container.py-4:has(.docket .card-body) .docket > .card-body,
+.site-main > .container.py-4:has(.docket .card-body) .docket > .card-header {
+  padding-left: 58px !important;
+}
+
 .site-main
   > .container.py-4:has(.docket .card-body)
   > .d-flex.justify-content-between {
@@ -2303,7 +2308,7 @@ pre,
   }
 
   .site-main > .container.py-4:has(.docket .card-body) .docket .card-body {
-    padding: 22px !important;
+    padding: 22px 22px 22px 52px !important;
   }
 
   .site-main > .container.py-4:has(.docket .card-body) .status-timeline {
@@ -2655,7 +2660,7 @@ pre,
   }
 
   .site-main > .container.py-4:has(.docket .card-body) .docket .card-body {
-    padding: 16px !important;
+    padding: 16px 16px 16px 40px !important;
   }
 
   .site-main > .container.py-4:has(.docket .card-body) .docket h3 {
@@ -3005,6 +3010,24 @@ pre,
   .site-main > .container.py-4:has(> .nav.nav-pills) > .nav.nav-pills {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+.modal-dialog {
+  max-height: calc(100vh - 2rem);
+  pointer-events: auto;
+}
+
+.site-main:has(.modal.show) {
+  z-index: 1060;
+}
+
+.modal-content {
+  max-height: calc(100vh - 2rem);
+  overflow: hidden;
+}
+
+.modal-body {
+  overflow-y: auto;
 }
 
 /* Final rectangular treatment for the complaint history status filters. */

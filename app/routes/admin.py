@@ -29,6 +29,7 @@ def dashboard():
     # Recent complaints for rapid triage
     recent_complaints = Complaint.query.order_by(Complaint.created_at.desc()).limit(8).all()
     available_workers = Worker.query.filter_by(status='Available').all()
+    workers = Worker.query.order_by(Worker.name.asc()).all()
 
     # Defect Type Breakdown for summary pill
     defect_counts = {
@@ -47,6 +48,7 @@ def dashboard():
         critical_count=critical_count,
         recent_complaints=recent_complaints,
         available_workers=available_workers,
+        workers=workers,
         defect_counts=defect_counts
     )
 
@@ -147,6 +149,25 @@ def assign_worker(complaint_id):
     if not worker:
         flash('Invalid worker selected.', 'danger')
         return redirect(request.referrer or url_for('admin.manage_complaints'))
+
+    current_assignment = next(
+        (assignment for assignment in reversed(complaint.assignments)
+         if assignment.status in {'Assigned', 'In Progress'}),
+        None
+    )
+
+    if current_assignment and current_assignment.worker_id == worker.id:
+        current_assignment.notes = notes or current_assignment.notes
+        db.session.commit()
+        flash(f"Assignment for {complaint.ticket_number} updated for '{worker.name}'.", 'success')
+        return redirect(request.referrer or url_for('admin.manage_complaints'))
+
+    if current_assignment:
+        previous_worker = current_assignment.worker
+        current_assignment.status = 'Reassigned'
+        previous_worker.active_tasks_count = max(0, previous_worker.active_tasks_count - 1)
+        if previous_worker.active_tasks_count < 3 and previous_worker.status == 'Busy':
+            previous_worker.status = 'Available'
 
     # Create assignment record
     assignment = WorkerAssignment(

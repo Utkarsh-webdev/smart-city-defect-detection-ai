@@ -108,7 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
             (error) => {
                 let msg = 'Unable to retrieve your location.';
                 if (error.code === error.PERMISSION_DENIED) {
-                    msg = 'Location permission denied. Please enter address manually.';
+                    msg = window.isSecureContext
+                        ? 'Location permission denied. Allow location access in the browser and try again.'
+                        : 'GPS needs HTTPS on this network address. Open the secure server URL and try again.';
+                } else if (error.code === error.TIMEOUT) {
+                    msg = 'GPS request timed out. Check device location services and try again.';
+                } else if (error.code === error.POSITION_UNAVAILABLE) {
+                    msg = 'Current position is unavailable. Check device location services and try again.';
                 }
                 if (geoStatus) geoStatus.innerHTML = `<span class="text-warning"><i class="fas fa-exclamation-triangle"></i> ${msg}</span>`;
             },
