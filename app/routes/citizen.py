@@ -173,7 +173,10 @@ def complaint_status(ticket_number):
 @citizen_required
 def complaint_history():
     """Full filterable history of citizen reported issues."""
-    status_filter = request.args.get('status', 'all')
+    status_filter = request.args.get('status', 'all').lower()
+    allowed_filters = {'all', 'pending', 'in_progress', 'resolved', 'rejected'}
+    if status_filter not in allowed_filters:
+        status_filter = 'all'
     page = request.args.get('page', 1, type=int)
 
     query = Complaint.query.filter_by(citizen_id=current_user.id)
@@ -184,6 +187,8 @@ def complaint_history():
         query = query.filter(Complaint.status.in_(['Worker Assigned', 'In Progress']))
     elif status_filter == 'resolved':
         query = query.filter_by(status='Resolved')
+    elif status_filter == 'rejected':
+        query = query.filter_by(status='Rejected')
 
     pagination = query.order_by(Complaint.created_at.desc()).paginate(
         page=page, per_page=current_app.config['ITEMS_PER_PAGE'], error_out=False

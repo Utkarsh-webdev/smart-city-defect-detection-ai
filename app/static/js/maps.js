@@ -41,6 +41,9 @@ function initDefectMap(elementId = 'defectMap', initialLat = 28.6139, initialLng
     const mapContainer = document.getElementById(elementId);
     if (!mapContainer) return;
 
+    if (defectMap) return defectMap;
+    if (mapContainer._leaflet_id) return;
+
     defectMap = L.map(elementId).setView([initialLat, initialLng], zoom);
 
     // OpenStreetMap Tile Layer

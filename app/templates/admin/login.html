@@ -6,11 +6,11 @@ Municipal Officer Portal Login - SmartDefect AI
 
 {% block content %}
 
-<section class="admin-login-page">
+<section class="admin-login-page auth-page">
 
     <div class="admin-login-card">
 
-        <div class="bg-dark text-white p-4 text-center">
+        <div class="card-header">
 
             <i class="fas fa-shield-halved text-warning fs-1 mb-3"></i>
 
@@ -24,12 +24,9 @@ Municipal Officer Portal Login - SmartDefect AI
 
         </div>
 
-        <div class="p-4 p-md-5">
+        <div class="card-body">
 
-            <form
-                method="POST"
-                action="{{ url_for('auth.admin_login') }}"
-            >
+            <form method="POST" action="{{ url_for('auth.admin_login') }}">
 
                 <div class="mb-4">
 
@@ -43,13 +40,7 @@ Municipal Officer Portal Login - SmartDefect AI
                             <i class="fas fa-user-shield"></i>
                         </span>
 
-                        <input
-                            type="text"
-                            name="email"
-                            class="form-control"
-                            placeholder="admin@smartcity.com"
-                            required
-                        >
+                        <input type="text" name="email" class="form-control" placeholder="admin@smartcity.com" required>
 
                     </div>
 
@@ -68,13 +59,8 @@ Municipal Officer Portal Login - SmartDefect AI
                             <i class="fas fa-key"></i>
                         </span>
 
-                        <input
-                            type="password"
-                            name="password"
-                            class="form-control"
-                            placeholder="Enter password"
-                            required
-                        >
+                        <input type="password" name="password" class="form-control" placeholder="Enter password"
+                            required>
 
                     </div>
 
@@ -85,17 +71,9 @@ Municipal Officer Portal Login - SmartDefect AI
 
                     <div class="form-check">
 
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            name="remember"
-                            id="rememberAdmin"
-                        >
+                        <input class="form-check-input" type="checkbox" name="remember" id="rememberAdmin">
 
-                        <label
-                            class="form-check-label small"
-                            for="rememberAdmin"
-                        >
+                        <label class="form-check-label small" for="rememberAdmin">
                             Keep session active
                         </label>
 
@@ -108,10 +86,7 @@ Municipal Officer Portal Login - SmartDefect AI
                 </div>
 
 
-                <button
-                    type="submit"
-                    class="btn btn-dark w-100 py-3 fw-bold"
-                >
+                <button type="submit" class="btn btn-dark w-100 py-3 fw-bold">
 
                     <i class="fas fa-lock-open text-warning me-2"></i>
 
@@ -124,10 +99,7 @@ Municipal Officer Portal Login - SmartDefect AI
 
             <div class="text-center mt-4 pt-3 border-top">
 
-                <a
-                    href="{{ url_for('auth.citizen_login') }}"
-                    class="text-muted small"
-                >
+                <a href="{{ url_for('auth.citizen_login') }}" class="text-muted small">
 
                     <i class="fas fa-arrow-left me-1"></i>
 
