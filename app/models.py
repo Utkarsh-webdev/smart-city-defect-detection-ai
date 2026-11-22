@@ -1,12 +1,17 @@
 """
 SQLAlchemy ORM Models for Smart City Defect Detection System
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
+
+
+def get_utc_now():
+    """Returns naive UTC datetime without deprecation warning."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
 class Citizen(UserMixin, db.Model):
@@ -20,7 +25,7 @@ class Citizen(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     address = db.Column(db.Text, nullable=True)
     is_active_account = db.Column(db.Boolean, default=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=get_utc_now)
 
     # Relationships
     complaints = db.relationship('Complaint', backref='citizen', lazy=True, cascade='all, delete-orphan')
@@ -43,7 +48,7 @@ class Citizen(UserMixin, db.Model):
             'email': self.email,
             'phone': self.phone,
             'address': self.address,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S') if self.created_at else None
         }
 
     def __repr__(self):
@@ -60,7 +65,7 @@ class Admin(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(50), default='Officer')  # SuperAdmin, DepartmentHead, Officer
     department = db.Column(db.String(100), default='Public Works')  # Public Works, Sanitation, Traffic
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=get_utc_now)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -97,7 +102,7 @@ class Worker(db.Model):
     status = db.Column(db.String(30), default='Available')  # Available, Busy, On-Leave
     active_tasks_count = db.Column(db.Integer, default=0)
     total_resolved_count = db.Column(db.Integer, default=0)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=get_utc_now)
 
     # Relationships
     assignments = db.relationship('WorkerAssignment', backref='worker', lazy=True)
@@ -154,8 +159,8 @@ class Complaint(db.Model):
     
     # Administrative Meta
     admin_notes = db.Column(db.Text, nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=get_utc_now)
+    updated_at = db.Column(db.DateTime, default=get_utc_now, onupdate=get_utc_now)
 
     # Relationships
     assignments = db.relationship('WorkerAssignment', backref='complaint', lazy=True, cascade='all, delete-orphan')
@@ -184,8 +189,8 @@ class Complaint(db.Model):
             'original_image': self.original_image,
             'annotated_image': self.annotated_image,
             'assigned_worker': assigned_worker,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M'),
-            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M')
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M') if self.created_at else None,
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M') if self.updated_at else None
         }
 
     def __repr__(self):
@@ -200,7 +205,7 @@ class WorkerAssignment(db.Model):
     complaint_id = db.Column(db.Integer, db.ForeignKey('complaints.id'), nullable=False)
     worker_id = db.Column(db.Integer, db.ForeignKey('workers.id'), nullable=False)
     assigned_by_admin_id = db.Column(db.Integer, db.ForeignKey('admins.id'), nullable=True)
-    assigned_at = db.Column(db.DateTime, default=datetime.utcnow)
+    assigned_at = db.Column(db.DateTime, default=get_utc_now)
     status = db.Column(db.String(30), default='Assigned')  # Assigned, In Progress, Completed, Reassigned
     notes = db.Column(db.Text, nullable=True)
 
@@ -210,7 +215,7 @@ class WorkerAssignment(db.Model):
             'complaint_id': self.complaint_id,
             'worker_id': self.worker_id,
             'worker_name': self.worker.name if self.worker else 'N/A',
-            'assigned_at': self.assigned_at.strftime('%Y-%m-%d %H:%M'),
+            'assigned_at': self.assigned_at.strftime('%Y-%m-%d %H:%M') if self.assigned_at else None,
             'status': self.status,
             'notes': self.notes
         }
@@ -227,7 +232,7 @@ class Resolution(db.Model):
     resolved_image = db.Column(db.String(255), nullable=True)
     material_used = db.Column(db.String(255), nullable=True)
     cost_estimate = db.Column(db.Float, default=0.0)
-    resolved_at = db.Column(db.DateTime, default=datetime.utcnow)
+    resolved_at = db.Column(db.DateTime, default=get_utc_now)
 
     def to_dict(self):
         return {
@@ -238,7 +243,7 @@ class Resolution(db.Model):
             'resolved_image': self.resolved_image,
             'material_used': self.material_used,
             'cost_estimate': self.cost_estimate,
-            'resolved_at': self.resolved_at.strftime('%Y-%m-%d %H:%M')
+            'resolved_at': self.resolved_at.strftime('%Y-%m-%d %H:%M') if self.resolved_at else None
         }
 
 
@@ -251,7 +256,7 @@ class Feedback(db.Model):
     citizen_id = db.Column(db.Integer, db.ForeignKey('citizens.id'), nullable=False)
     rating = db.Column(db.Integer, nullable=False)  # 1 to 5 Stars
     comments = db.Column(db.Text, nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=get_utc_now)
 
     def to_dict(self):
         return {
@@ -260,7 +265,7 @@ class Feedback(db.Model):
             'citizen_id': self.citizen_id,
             'rating': self.rating,
             'comments': self.comments,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M')
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M') if self.created_at else None
         }
 
 
@@ -275,4 +280,4 @@ class AIDetectionLog(db.Model):
     processing_time_ms = db.Column(db.Float, default=0.0)
     bounding_boxes = db.Column(db.Text, nullable=True)  # JSON serialized coordinates
     model_version = db.Column(db.String(50), default='YOLOv8n-DefectDetector-v1.0')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=get_utc_now)

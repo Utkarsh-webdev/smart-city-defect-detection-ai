@@ -4,7 +4,7 @@ Seeds initial Admin, Citizen, Workers, AI-inspected Complaints, Resolutions, and
 """
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from PIL import Image, ImageDraw
 
 # Add parent directory to path
@@ -73,7 +73,7 @@ def seed_database():
 
         print(">> Creating Demo Citizen account...")
         citizen = Citizen(
-            full_name='Aarav Sharma',
+            full_name='Utkarh Jha',
             email='demo@user.com',
             phone='+91 9876543210',
             address='Flat 402, Green Valley Apts, Sector 14, Smart City'
@@ -107,18 +107,6 @@ def seed_database():
 
         print(">> Generating seed complaints and running AI inference...")
         sample_complaints = [
-            {
-                'ticket': 'SCD-202608-1011',
-                'title': 'Severe crater-like pothole on Main Ring Road',
-                'desc': 'Deep pothole causing vehicle damage and traffic bottleneck near Pillar 45.',
-                'reported': 'Pothole',
-                'lat': 28.6145, 'lng': 77.2095,
-                'address': 'Ring Road near Metro Pillar 45, North Zone',
-                'zone': 'North Zone',
-                'status': 'Worker Assigned',
-                'worker_idx': 0,
-                'days_ago': 3
-            },
             {
                 'ticket': 'SCD-202608-1012',
                 'title': 'Damaged STOP sign causing blind turn danger',
@@ -175,7 +163,7 @@ def seed_database():
             fname = f"seed_{item['reported'].lower().replace(' ', '_')}_{i+1}.jpg"
             orig_img, annot_img = generate_seed_image(fname, defect_type=item['reported'])
 
-            created_time = datetime.utcnow() - timedelta(days=item['days_ago'])
+            created_time = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=item['days_ago'])
             
             c = Complaint(
                 ticket_number=item['ticket'],

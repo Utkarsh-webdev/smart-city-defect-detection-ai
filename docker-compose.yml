@@ -1,0 +1,34 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: smartcity_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: smart_city_db
+      MYSQL_USER: smartcity_user
+      MYSQL_PASSWORD: smartcity_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  web:
+    build: .
+    container_name: smartcity_web
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=smart-city-defect-detector-super-secret-key-2026
+      - DATABASE_URL=mysql+pymysql://smartcity_user:smartcity_pass@db:3306/smart_city_db
+      - AI_CONFIDENCE_THRESHOLD=0.60
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app/static/uploads:/app/app/static/uploads
+
+volumes:
+  db_data:

@@ -1,8 +1,46 @@
+# Python Virtual Environment
 .venv/
+venv/
+ENV/
+env/
+
+# Byte-compiled / optimized files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Environment and Secret configurations
 .env
-.vscode/
+.env.local
+
+# Ultralytics cache & settings
+.yolo/
+runs/
+*.pt
+
+# Database
 instance/
 *.db
-static/uploads/*
+*.sqlite3
+
+# Uploads and temporary test artifacts
+app/static/uploads/original/*.jpg
+app/static/uploads/original/*.png
+app/static/uploads/original/*.jpeg
+app/static/uploads/annotated/*.jpg
+app/static/uploads/annotated/*.png
+app/static/uploads/annotated/*.jpeg
+app/static/uploads/resolved/*.jpg
+app/static/uploads/resolved/*.png
+app/static/uploads/resolved/*.jpeg
+!app/static/uploads/original/.gitkeep
+!app/static/uploads/annotated/.gitkeep
+!app/static/uploads/resolved/.gitkeep
+app/ai/test_samples/
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

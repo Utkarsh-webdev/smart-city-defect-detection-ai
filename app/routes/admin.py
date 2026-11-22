@@ -16,7 +16,6 @@ admin_bp = Blueprint('admin', __name__)
 
 
 @admin_bp.route('/dashboard')
-@login_required
 @admin_required
 def dashboard():
     """Administrator Overview Dashboard with Real-Time KPIs and Map View."""
@@ -54,7 +53,6 @@ def dashboard():
 
 
 @admin_bp.route('/complaints')
-@login_required
 @admin_required
 def manage_complaints():
     """Comprehensive complaints table with multi-criteria filtering and pagination."""
@@ -114,11 +112,10 @@ def manage_complaints():
 
 
 @admin_bp.route('/complaint/<int:complaint_id>/reclassify', methods=['POST'])
-@login_required
 @admin_required
 def reclassify_defect(complaint_id):
     """Allows municipal officer to override AI detection or update defect severity."""
-    complaint = Complaint.query.get_or_404(complaint_id)
+    complaint = db.get_or_404(Complaint, complaint_id)
     
     new_defect = request.form.get('final_defect_type')
     new_severity = request.form.get('severity')
@@ -137,15 +134,14 @@ def reclassify_defect(complaint_id):
 
 
 @admin_bp.route('/complaint/<int:complaint_id>/assign', methods=['POST'])
-@login_required
 @admin_required
 def assign_worker(complaint_id):
     """Dispatches a municipal maintenance worker to address the defect."""
-    complaint = Complaint.query.get_or_404(complaint_id)
+    complaint = db.get_or_404(Complaint, complaint_id)
     worker_id = request.form.get('worker_id', type=int)
     notes = request.form.get('notes', '').strip()
 
-    worker = Worker.query.get(worker_id)
+    worker = db.session.get(Worker, worker_id)
     if not worker:
         flash('Invalid worker selected.', 'danger')
         return redirect(request.referrer or url_for('admin.manage_complaints'))
@@ -192,11 +188,10 @@ def assign_worker(complaint_id):
 
 
 @admin_bp.route('/complaint/<int:complaint_id>/resolve', methods=['POST'])
-@login_required
 @admin_required
 def resolve_complaint(complaint_id):
     """Marks defect as resolved with repair remarks and optional proof."""
-    complaint = Complaint.query.get_or_404(complaint_id)
+    complaint = db.get_or_404(Complaint, complaint_id)
     worker_id = request.form.get('worker_id', type=int)
     resolution_notes = request.form.get('resolution_notes', '').strip()
     material_used = request.form.get('material_used', '').strip()
@@ -223,7 +218,7 @@ def resolve_complaint(complaint_id):
 
     # Update worker workload
     if worker_id:
-        worker = Worker.query.get(worker_id)
+        worker = db.session.get(Worker, worker_id)
         if worker:
             worker.active_tasks_count = max(0, worker.active_tasks_count - 1)
             worker.total_resolved_count += 1
@@ -238,7 +233,6 @@ def resolve_complaint(complaint_id):
 
 
 @admin_bp.route('/workers', methods=['GET', 'POST'])
-@login_required
 @admin_required
 def workers():
     """Worker Management CRUD Route."""
@@ -271,7 +265,7 @@ def workers():
 
         elif action == 'toggle_status':
             w_id = request.form.get('worker_id', type=int)
-            worker = Worker.query.get_or_404(w_id)
+            worker = db.get_or_404(Worker, w_id)
             new_status = request.form.get('status', 'Available')
             worker.status = new_status
             db.session.commit()
@@ -284,7 +278,6 @@ def workers():
 
 
 @admin_bp.route('/analytics')
-@login_required
 @admin_required
 def analytics():
     """Advanced Data Analytics, Defect Trends, and Export Options."""
@@ -316,7 +309,6 @@ def analytics():
 
 
 @admin_bp.route('/export/csv')
-@login_required
 @admin_required
 def export_csv():
     """Exports all filtered complaints to CSV for municipal reporting."""

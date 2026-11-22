@@ -2,7 +2,7 @@
 REST API Endpoints for AJAX interactions, Map GeoJSON Markers,
 and Chart.js Data Feeds.
 """
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Blueprint, jsonify, request
 from flask_login import login_required
 from app.models import db, Complaint, Worker, Feedback, AIDetectionLog
@@ -84,7 +84,7 @@ def get_analytics_data():
     - Zone distribution
     """
     # 1. 7-Day Intake Trend
-    today = datetime.utcnow().date()
+    today = datetime.now(timezone.utc).date()
     date_labels = []
     intake_counts = []
     resolved_counts = []
@@ -141,7 +141,7 @@ def get_analytics_data():
 @api_bp.route('/complaint/<int:complaint_id>', methods=['GET'])
 def get_complaint_detail(complaint_id):
     """Returns single complaint details as JSON for modal rendering."""
-    complaint = Complaint.query.get_or_404(complaint_id)
+    complaint = db.get_or_404(Complaint, complaint_id)
     return jsonify({
         'status': 'success',
         'complaint': complaint.to_dict()

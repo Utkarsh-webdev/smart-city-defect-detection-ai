@@ -48,13 +48,13 @@ def create_app(config_name=None):
         if user_id.startswith('citizen_'):
             try:
                 c_id = int(user_id.split('_')[1])
-                return Citizen.query.get(c_id)
+                return db.session.get(Citizen, c_id)
             except (ValueError, IndexError):
                 return None
         elif user_id.startswith('admin_'):
             try:
                 a_id = int(user_id.split('_')[1])
-                return Admin.query.get(a_id)
+                return db.session.get(Admin, a_id)
             except (ValueError, IndexError):
                 return None
         return None

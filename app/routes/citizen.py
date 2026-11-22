@@ -5,7 +5,7 @@ status tracking timeline, and resolution feedback.
 """
 import os
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
@@ -25,13 +25,12 @@ def allowed_file(filename):
 
 def generate_ticket_number():
     """Generates an enterprise tracking ticket ID (e.g. SCD-202608-8421)."""
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     unique_suffix = str(uuid.uuid4().int)[:4]
     return f"SCD-{now.strftime('%Y%m')}-{unique_suffix}"
 
 
 @citizen_bp.route('/dashboard')
-@login_required
 @citizen_required
 def dashboard():
     """Citizen central dashboard with recent activity and overview metrics."""
@@ -57,7 +56,6 @@ def dashboard():
 
 
 @citizen_bp.route('/complaints/new', methods=['GET', 'POST'])
-@login_required
 @citizen_required
 def upload_complaint():
     """Defect reporting route with image upload, GPS capture, and AI inference."""
@@ -94,7 +92,7 @@ def upload_complaint():
 
         # Save Original Image
         ext = file.filename.rsplit('.', 1)[1].lower()
-        unique_filename = f"{uuid.uuid4().hex}_{int(datetime.utcnow().timestamp())}.{ext}"
+        unique_filename = f"{uuid.uuid4().hex}_{int(datetime.now(timezone.utc).timestamp())}.{ext}"
         original_filepath = os.path.join(current_app.config['ORIGINAL_FOLDER'], unique_filename)
         annotated_filename = f"annotated_{unique_filename}"
         annotated_filepath = os.path.join(current_app.config['ANNOTATED_FOLDER'], annotated_filename)
@@ -160,7 +158,6 @@ def upload_complaint():
 
 
 @citizen_bp.route('/complaint/<string:ticket_number>')
-@login_required
 @citizen_required
 def complaint_status(ticket_number):
     """Detailed status tracking and lifecycle timeline for a specific complaint."""
@@ -169,7 +166,6 @@ def complaint_status(ticket_number):
 
 
 @citizen_bp.route('/complaints/history')
-@login_required
 @citizen_required
 def complaint_history():
     """Full filterable history of citizen reported issues."""
@@ -203,7 +199,6 @@ def complaint_history():
 
 
 @citizen_bp.route('/complaint/<int:complaint_id>/feedback', methods=['POST'])
-@login_required
 @citizen_required
 def submit_feedback(complaint_id):
     """Submit citizen satisfaction rating and comments on resolved issues."""

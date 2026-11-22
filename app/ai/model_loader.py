@@ -4,9 +4,13 @@ Provides thread-safe singleton loading for AI object detection weights.
 """
 import os
 import logging
-from config import Config
+from config import Config, basedir
 
 logger = logging.getLogger(__name__)
+
+# Ensure Ultralytics writes configuration inside the project directory
+# rather than system/user directories which might have permission restrictions.
+os.environ.setdefault('YOLO_CONFIG_DIR', os.path.abspath(os.path.join(basedir, '.yolo')))
 
 _model_instance = None
 
@@ -21,19 +25,22 @@ def get_model():
         return _model_instance
 
     model_path = Config.YOLO_MODEL_PATH
+    root_model_path = os.path.join(basedir, 'yolov8n.pt')
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
 
     try:
         from ultralytics import YOLO
-        logger.info(f"Loading YOLOv8 model from: {model_path}")
         
-        # Check if local custom weights exist; if not, use base yolov8n.pt
+        # Check custom weights path first, then root path, then base 'yolov8n.pt'
         if os.path.exists(model_path):
-            _model_instance = YOLO(model_path)
+            target_path = model_path
+        elif os.path.exists(root_model_path):
+            target_path = root_model_path
         else:
-            logger.info("Custom weights not found at path; initializing base 'yolov8n.pt' model...")
-            _model_instance = YOLO('yolov8n.pt')
-            
+            target_path = 'yolov8n.pt'
+
+        logger.info(f"Loading YOLOv8 model from: {target_path}")
+        _model_instance = YOLO(target_path)
         logger.info("YOLOv8 Defect Detection Model loaded successfully.")
     except Exception as e:
         logger.warning(f"Ultralytics YOLO model failed to load ({str(e)}). Using computer vision fallback detector.")

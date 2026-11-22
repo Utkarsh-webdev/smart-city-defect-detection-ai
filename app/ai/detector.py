@@ -56,7 +56,6 @@ class DefectDetector:
 
         # Try to load default font, fallback to standard bitmap font
         try:
-            # Scaled font size based on image width
             font_size = max(14, int(w * 0.022))
             font = ImageFont.load_default()
         except Exception:
@@ -70,7 +69,13 @@ class DefectDetector:
 
             x1, y1, x2, y2 = box
             
-            # Draw multi-line bounding box for thickness
+            # Ensure coordinates stay within image boundaries
+            x1 = max(0, min(x1, w - 1))
+            y1 = max(0, min(y1, h - 1))
+            x2 = max(x1 + 1, min(x2, w))
+            y2 = max(y1 + 1, min(y2, h))
+
+            # Draw multi-line bounding box for visibility
             line_width = max(3, int(w * 0.005))
             for i in range(line_width):
                 draw.rectangle([x1 - i, y1 - i, x2 + i, y2 + i], outline=color)
@@ -94,7 +99,8 @@ class DefectDetector:
 
     def _cv_fallback_inference(self, image_path, reported_type='Pothole'):
         """
-        Computer vision heuristic inference when YOLO weights are running offline.
+        Computer vision heuristic inference when YOLO weights are running offline
+        or when model detects no custom municipal classes.
         Uses OpenCV Canny edge & contour spatial analysis to detect road defect regions.
         """
         cv_img = cv2.imread(image_path)
@@ -194,6 +200,10 @@ class DefectDetector:
             logger.error(f"Inference error encountered: {str(e)}. Switching to CV analyzer.")
             detections = self._cv_fallback_inference(image_path, reported_type=reported_hint or 'Pothole')
 
+        # If YOLO did not find municipal defect classes, fallback to CV defect analyzer
+        if not detections:
+            detections = self._cv_fallback_inference(image_path, reported_type=reported_hint or 'Pothole')
+
         # Compute max confidence and primary detected class
         if detections:
             best_detection = max(detections, key=lambda x: x['confidence'])
@@ -224,7 +234,7 @@ class DefectDetector:
         else:
             severity = 'Low'
 
-        # Fallback decision: if confidence < threshold, require Admin Review
+        # Fallback decision: if confidence < threshold, mark for manual review
         if max_confidence >= self.confidence_threshold:
             ai_status = 'Processed'
             system_status = 'Admin Review'

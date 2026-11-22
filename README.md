@@ -145,11 +145,59 @@ Open your browser and navigate to: **`http://127.0.0.1:5000`**
 
 ## 🧪 Testing and Verification
 
-To verify the YOLOv8 computer vision detection and bounding box rendering independently:
+### 1. Full Automated Unit & Integration Test Suite (21 Tests)
+Run the complete automated test suite covering authentication, role-based access, defect reporting, YOLOv8 inference, admin triage, worker dispatch, resolution, feedback, and REST APIs:
+```powershell
+python tests/test_app.py
+```
+* **Output:** Executes 21 comprehensive test cases validating all application layers in under 30 seconds with 100% pass rate.
+
+### 2. Standalone AI Computer Vision Pipeline Verification
+To verify the YOLOv8 computer vision detection, bounding box rendering, and severity calculation independently:
 ```powershell
 python app/ai/test_ai.py
 ```
 * **Output:** Generates a synthetic test defect image, runs inference, prints detection metadata (class, confidence, severity, latency), and saves the annotated bounding box image to `app/ai/test_samples/sample_annotated.jpg`.
+
+---
+
+## 🚀 Cloud Deployment Guide
+
+### Option A: Render.com (Recommended for Free Cloud Hosting)
+1. Fork or push this repository to GitHub.
+2. In the Render Dashboard, click **New +** $\to$ **Web Service**.
+3. Connect your repository.
+4. Set the following build and start commands:
+   * **Build Command:** `pip install -r requirements.txt && python database/seed_data.py`
+   * **Start Command:** `gunicorn run:app`
+5. Add Environment Variables (optional, or use defaults):
+   * `SECRET_KEY` = `your-secure-random-key`
+   * `DATABASE_URL` = (leave blank for built-in SQLite, or link a free Render PostgreSQL database)
+6. Click **Deploy Web Service**.
+
+### Option B: Docker & Docker-Compose (Turnkey Containerization)
+Deploy the entire application alongside a dedicated MySQL 8.0 container:
+```bash
+docker-compose up --build
+```
+Access the application at `http://localhost:5000`. Database schema and seed data are initialized automatically.
+
+### Option C: Ubuntu Linux VPS (Nginx + Gunicorn + Systemd)
+```bash
+# 1. Install dependencies
+sudo apt update && sudo apt install -y python3-pip python3-venv libgl1 libglib2.0-0 nginx
+
+# 2. Setup project & virtual environment
+git clone <your-repo-url> /var/www/smartcity
+cd /var/www/smartcity
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python database/seed_data.py
+
+# 3. Run with Gunicorn
+gunicorn --bind 127.0.0.1:5000 --workers 3 run:app
+```
 
 ---
 
